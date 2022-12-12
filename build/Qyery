@@ -1,0 +1,63 @@
+	rows, err := conn.Query(context.Background(),
+		`INSERT INTO study_documents
+		(company_id, study_document_register_id, snils, issue_date, end_date,
+		post, work_place, organization, study_type, series, number, study_prog_name, 
+		profession, reg_number, study_period, name_first, name_second, name_middle,
+		qualification_name, create_type)
+		SELECT
+			$1,
+			$2,
+			l.snils, l.issue_date, l.end_date,
+			l.post, l.work_place, l.organization, l.study_type, l.series, l.number, l.study_prog_name,
+			l.profession, l.reg_number, l.study_period, l.name_first, l.name_second, l.name_middle,
+			'manual'::doc_create_types
+		FROM study_document_inserts AS l
+		WHERE h.id = $3
+		RETURNING study_documents_ref(study_documents), l.id`,
+		study_document_registers_ref.CompanyID,
+		study_document_registers_ref.DocID,
+		args.Study_document_insert_head_id)
+
+
+--delete from study_document_attachments
+--where study_documents_ref->>'dataType'='study_document_insert_attachments'
+--where study_documents_ref->>'dataType'='study_document_inserts'
+--SELECT * FROM study_document_insert_attachments
+WITH sel AS (
+			SELECT
+				row_number() over (ORDER BY l.id) AS n,
+				l.id,
+				l.snils, l.issue_date, l.end_date,
+				l.post, l.work_place, l.organization, l.study_type, l.series, l.number, l.study_prog_name,
+				l.profession, l.reg_number, l.study_period, l.name_first, l.name_second, l.name_middle, l.qualification_name				
+			FROM study_document_inserts AS l
+			WHERE l.study_document_insert_head_id = 1
+			ORDER BY l.id
+		),
+		ins AS (
+			INSERT INTO study_documents
+			(company_id, study_document_register_id,
+			snils, issue_date, end_date,
+			post, work_place, organization, study_type, series, number, study_prog_name, 
+			profession, reg_number, study_period, name_first, name_second, name_middle, qualification_name,
+			create_type)
+			SELECT
+				1, null,
+				sel.snils, sel.issue_date, sel.end_date,
+				sel.post, sel.work_place, sel.organization, sel.study_type, sel.series, sel.number, sel.study_prog_name,
+				sel.profession, sel.reg_number, sel.study_period, sel.name_first, sel.name_second, sel.name_middle, sel.qualification_name,
+				'manual'::doc_create_types
+			FROM sel
+			RETURNING id, study_documents_ref(study_documents) AS ref
+		),
+		ins_sel AS (
+			SELECT
+				ins.ref,
+				row_number() over (ORDER BY ins.id) AS n
+			FROM ins
+		)
+		SELECT
+			ins_sel.ref,
+			sel.id
+		FROM ins_sel
+		LEFT JOIN sel ON sel.n = ins_sel.n

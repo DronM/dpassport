@@ -1,0 +1,20 @@
+<table id="{{id}}" class="table table-bordered table-responsive table-striped" style="font-size: {{FONT_SIZE}}%;">
+	<thead class="previewGridHeader" style="font-weight: bold; font-size: {{HEADER_FONT_SIZE}}%">
+		<tr>
+			{{#HEADER}}
+			<th id={{COL_ID}} class="draggable"
+			title="Перетащите колонку для изменения порядка следования столбцов"
+			field_id="{{NAME}}" data_type="{{DATA_TYPE}}" max_length="{{MAX_LENGTH}}" required="{{REQUIRED}}">{{DESCR}}</th>
+			{{/HEADER}}
+		</tr>
+	</thead>
+	<tbody>
+		{{#ROWS}}
+		<tr>
+			{{#COL}}
+			<td class="draggble">{{VAL}}</td>
+			{{/COL}}
+		</tr>
+		{{/ROWS}}
+	</tbody>
+</table>

@@ -1,0 +1,41 @@
+-- VIEW: public.study_document_insert_heads_list
+
+--DROP VIEW public.study_document_insert_heads_list;
+
+CREATE OR REPLACE VIEW public.study_document_insert_heads_list AS
+	SELECT
+		t.id
+		,t.register_name
+		,t.register_date
+		,clients_ref(companies_ref_t) AS companies_ref
+		,t.company_id
+		,t.user_id
+		,(SELECT
+			jsonb_agg(
+				att.content_info || jsonb_build_object('dataBase64',encode(att.content_preview, 'base64'))
+			)
+		FROM study_document_attachments att
+		WHERE att.study_documents_ref->>'dataType' = 'study_document_insert_heads' AND (att.study_documents_ref->'keys'->>'id')::int = t.id
+		) AS register_attachment,
+		
+		(SELECT count(cert.*) FROM study_document_inserts AS cert WHERE cert.study_document_insert_head_id = t.id) AS study_document_count
+
+		,common_issue_date		
+		,common_end_date
+		,common_post
+		,common_work_place
+		,common_organization
+		,common_study_type
+		,common_series
+		,common_study_prog_name
+		,common_profession
+		,common_study_period
+		,common_qualification_name
+		
+	FROM public.study_document_insert_heads AS t
+	
+	LEFT JOIN clients AS companies_ref_t ON companies_ref_t.id = t.company_id
+	ORDER BY t.register_date DESC
+	;
+	
+ALTER VIEW public.study_document_insert_heads_list OWNER TO ;

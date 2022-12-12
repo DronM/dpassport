@@ -1,0 +1,7 @@
+http://192.168.1.3:59000/lk?ef159690ceef1a60bff667a1632e1905
+
+http://192.168.1.3:59000/lk?ef159690ceef1a60bff667a1632e1905
+
+https://certs.katren.org/lk?ef159690ceef1a60bff667a1632e1905
+
+curl -d '{"token": "nentoken", "method": "index", "qrcode": "35dde658f72ac53626911a9eaff9f0d3"}' -H "Content-Type: application/json" -X POST -i https://gazpro-admin.centr-ugra.ru/api_learning

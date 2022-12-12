@@ -1,0 +1,33 @@
+-- VIEW: public.study_document_regiters_list
+
+--DROP VIEW public.study_document_regiters_list;
+
+CREATE OR REPLACE VIEW public.study_document_regiters_list AS
+	SELECT
+		t.id
+		,t.number
+		,t.date_time
+		,t.client_id
+		,clients_ref(clients_ref_t) AS clients_ref
+		,t.create_type
+		,t.digital_sig
+	FROM public.study_document_regiters AS t
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	LEFT JOIN clients AS clients_ref_t ON clients_ref_t.id = t.client_id
+	
+	
+	
+	
+	
+	ORDER BY date_time DESC
+	;
+	
+ALTER VIEW public.study_document_regiters_list OWNER TO ;

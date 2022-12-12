@@ -1,0 +1,33 @@
+.view_type--container {
+	margin-top: 20px;
+}
+.view_type--container input {
+	cursor:pointer;
+	font-weight: normal !important;
+	margin-left: 10px;
+}
+.view_type--container label {
+	font-weight: normal !important;
+}
+
+.doc_cert{
+	cursor:pointer;
+}
+
+.dataGridContainer{
+	margin: 10px 10px;
+	/*overflow-y: auto !important;*/
+	overflow-y: auto;	
+}
+
+#grid_cmd{
+	margin:10px 10px;
+}
+
+.fieldLabel{
+	padding-top:6px;
+}
+.searchVal{
+	font-weight: bolder;
+	color: yellow;
+}

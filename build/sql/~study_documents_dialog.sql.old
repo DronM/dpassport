@@ -1,0 +1,57 @@
+-- VIEW: public.study_documents_dialog
+
+--DROP VIEW public.study_documents_dialog;
+
+CREATE OR REPLACE VIEW public.study_documents_dialog AS
+	SELECT
+		t.id
+		,study_document_types_ref(study_document_types_ref_t) AS study_document_types_ref
+		,t.date_time
+		,clients_ref(clients_ref_t) AS clients_ref
+		,study_document_registers_ref(study_document_registers_ref_t) AS study_document_registers_ref
+		,t.create_type
+		,t.person_data
+		,t.series
+		,t.number
+		,t.study_prog_name
+		,t.study_hours
+		,t.digital_sig
+		
+		,(SELECT
+			jsonb_agg(
+				att.content_info || jsonb_build_object('dataBase64',encode(att.content_preview, 'base64'))
+			)
+		FROM study_document_attachments att
+		WHERE att.study_documents_ref->>'dataType' = 'study_documents' AND (att.study_documents_ref->'keys'->>'id')::int = t.id
+		) AS attachments
+		
+	FROM public.study_documents AS t
+	
+	
+	
+	LEFT JOIN study_document_types AS study_document_types_ref_t ON study_document_types_ref_t.id = t.study_document_type_id
+	
+	
+	
+	LEFT JOIN clients AS clients_ref_t ON clients_ref_t.id = t.client_id
+	
+	LEFT JOIN study_document_registers AS study_document_registers_ref_t ON study_document_registers_ref_t.id = t.study_document_register_id
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	;
+	
+ALTER VIEW public.study_documents_dialog OWNER TO ;

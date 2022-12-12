@@ -1,0 +1,2430 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE metadata SYSTEM "metadata.dtd">
+<metadata debug="TRUE" owner="dpassport" dataSchema="public">
+	<versions>
+		<version dateOpen="2022-08-15 09:08:53">1.001</version>
+	<version dateOpen="2022-08-15 09:08:53" dateClose="2022-09-20 08:09:33">1.001<lastBuild>2022-12-12 11:31:51</lastBuild></version><version dateOpen="2022-09-21 08:09:20" dateClose="2022-09-22 15:09:17">1.002</version><version dateOpen="2022-09-22 15:09:28" dateClose="2022-09-22 15:09:28">1.003</version><version dateOpen="2022-09-23 17:09:07" dateClose="2022-10-03 13:10:31">1.004</version><version dateOpen="2022-10-04 08:10:07" dateClose="2022-10-07 12:10:25">1.005</version><version dateOpen="2022-10-10 17:10:29" dateClose="2022-10-21 11:10:46">1.006</version><version dateOpen="2022-10-22 05:10:15" dateClose="2022-10-24 09:10:16">1.007</version><version dateOpen="2022-10-24 11:10:05" dateClose="2022-10-24 11:10:05">1.008</version><version dateOpen="2022-11-29 12:11:56" dateClose="2022-12-12 10:12:34">1.009</version><version dateOpen="2022-12-12 11:12:30">1.010</version></versions>
+	<globalFilters>
+		<field id="user_id"/>
+		<field id="client_id"/>
+	</globalFilters>
+	<enums>
+		<enum id="locales">
+			<value id="ru">
+				<ru descr="Русский"/>
+			</value>
+		</enum>	
+		<enum id="role_types">
+			<value id="admin">
+				<ru descr="Администратор"/>
+			</value>
+			<value id="client_admin1">
+				<ru descr="Администратор уровень 1"/>
+			</value>
+			<value id="client_admin2">
+				<ru descr="Администратор уровень 2"/>
+			</value>			
+			<value id="person">
+				<ru descr="Физическое лицо"/>
+			</value>			
+		</enum>	
+		<enum id="data_types" descr="Типы данных">
+			<value id="users">
+				<ru descr="Пользователи"/>
+			</value>
+			<value id="client_accesses">
+				<ru descr="Доступы площадок"/>
+			</value>
+			<value id="clients">
+				<ru descr="Площадка"/>
+			</value>
+			<value id="study_document_registers">
+				<ru descr="Протокол"/>
+			</value>
+			<value id="study_documents">
+				<ru descr="Документ"/>
+			</value>
+			<value id="study_document_attachments">
+				<ru descr="Вложение документа"/>
+			</value>
+		</enum>	
+		<enum id="doc_create_types" descr="Виды создания документов">
+			<value id="manual">
+				<ru descr="Вручную"/>
+			</value>
+			<value id="upload">
+				<ru descr="Загружено из файла"/>
+			</value>
+			<value id="api">
+				<ru descr="Загружено через API"/>
+			</value>			
+		</enum>	
+		<enum id="object_mod_actions" descr="Действия с объектами">
+			<value id="insert">
+				<ru descr="Добавление"/>
+			</value>
+			<value id="update">
+				<ru descr="Изменение"/>
+			</value>
+			<value id="delete">
+				<ru descr="Удаление"/>
+			</value>			
+			<value id="upload_scan">
+				<ru descr="Добавлен скан"/>
+			</value>			
+			<value id="delete_scan">
+				<ru descr="Удален скан"/>
+			</value>			
+			
+		</enum>	
+		<enum id="sexes" descr="Полы">
+			<value id="male">
+				<ru descr="Мужской"/>
+			</value>
+			<value id="female">
+				<ru descr="Женский"/>
+			</value>
+		</enum>	
+		<enum id="mail_types" descr="Типы писем">
+			<value id="person_register">
+				<ru descr="Регистрация физического лица"/>
+			</value>
+			<value id="password_recover">
+				<ru descr="Восстановление пароля"/>
+			</value>
+			<value id="admin_1_register">
+				<ru descr="Регистрация администратора тип 1"/>
+			</value>
+			<value id="client_activation">
+				<ru descr="Активация площадки"/>
+			</value>
+			<value id="client_registration">
+				<ru descr="Регистрация новой площадки"/>
+			</value>			
+			<value id="client_expiration">
+				<ru descr="Предупреждение об окончании срока оплаты площадки"/>
+			</value>
+			<value id="person_url">
+				<ru descr="Персональная ссылка для входа в личный кабинет"/>
+			</value>
+			<value id="user_activation">
+				<ru descr="Активация пользователя"/>
+			</value>			
+			<value id="client_order">
+				<ru descr="Счет на оплату клиенту"/>
+			</value>			
+			
+		</enum>	
+	</enums>
+	
+	<modules>
+	</modules>
+	
+	<models limitConstant="doc_per_page_count">
+		<model id="TimeZoneLocale" parent="ModelSQL" dataTable="time_zone_locales" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" required="TRUE" alias="Код"/>
+			<field id="descr" dataType="String" required="TRUE" length="100"/>
+			<field id="name" dataType="String" required="TRUE" length="50"/>
+			<field id="hour_dif" dataType="Float" length="5" precision="1" required="TRUE"/>
+		</model>
+	
+		<model id="User" parent="ModelSQL" dataTable="users" virtual="FALSE">
+			<defaultOrder>
+				<field id="name"/>
+			</defaultOrder>
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" dbRequired="TRUE"/>
+			<field id="name" dataType="String" dbRequired="TRUE" length="50" alias="Email"/>
+			<field id="name_full" dataType="Text"/>
+			<field id="post" dataType="Text"/>
+			<field id="sex" dataType="Enum" enumId="sexes"/>
+			<field id="birthdate" dataType="Date"/>
+			<field id="snils" dataType="String" length="11"/>
+			<field id="photo" dataType="Bytea"/>
+			<field id="role_id" dataType="Enum" enumId="role_types" required="TRUE"/>			
+			<field id="pwd" dataType="Password" length="32"/>
+			<field id="create_dt" dataType="DateTimeTZ" defaultValue="CURRENT_TIMESTAMP"/>
+			<field id="banned" dataType="Bool" defaultValue="FALSE"/>
+			<field id="time_zone_locale_id" dataType="Int" refTable="time_zone_locales" refField="id"/>			
+			<field id="phone_cel" dataType="String" length="15"/>
+			<field id="locale_id" dataType="Enum" enumId="locales"/>
+			<field id="email_confirmed" dataType="Bool" alias="Адрес электр.почты подтвержден" defaultValue="FALSE"/>
+			<field id="client_id" dataType="Int" refTable="clients" refField="id" alias="Поле убрать, тк есть компания, а площадка это родитель компании"/>
+			<field id="company_id" dataType="Int" refTable="clients" refField="id" alias="Компания"/>
+			<field id="person_url" dataType="String" length="32" alias="URL личного кабинета"/>
+			<field id="descr" dataType="Text" alias="Представление пользователя, идексированное поле для полиска. Обновляется триггером"/>
+			<field id="viewed" dataType="Bool" defaultValue="FALSE"/>
+			<field id="qr_code" dataType="Bytea"/>
+			<field id="qr_code_sent_date" dataType="DateTimeTZ"/>
+			<index id="users_name_index">
+				<expression>lower(name)</expression>
+			</index>
+			<index id="users_name_full_idx">
+				<expression>lower(name_full)</expression>
+			</index>			
+			<index id="users_snils_idx">
+				<field id="snils"/>
+			</index>			
+			<index id="users_role_id_idx">
+				<field id="role_id"/>
+			</index>						
+			<index id="users_client_idx">
+				<field id="client_id"/>
+			</index>						
+			<index id="users_company_idx">
+				<field id="company_id"/>
+			</index>									
+			<index id="users_person_url_idx">
+				<field id="person_url"/>
+			</index>
+			<index id="users_descr_idx">
+				<expression>USING gin (descr gin_trgm_ops)</expression>
+			</index>			
+												
+		</model>
+		<model id="UserList" parent="ModelSQL" dataTable="users_list" virtual="TRUE">
+			<defaultOrder>
+				<field id="viewed" sortDirect="ASC"/>
+				<field id="name_full"/>
+			</defaultOrder>
+			<field id="id" dataType="Int" primaryKey="TRUE"/>
+			<field id="viewed" dataType="Bool" defaultValue="FALSE"/>
+			<field id="name" dataType="String"/>
+			<field id="name_full" dataType="Text"/>
+			<field id="snils" dataType="String"/>
+			<field id="post" dataType="String"/>
+			<field id="sex" dataType="String"/>
+			<field id="role_id" dataType="Enum" enumId="role_types"/>
+			<field id="phone_cel" dataType="String"/>
+			<field id="tel_ext" dataType="String"/>
+			<field id="clients_ref" dataType="JSON"/>
+			<field id="client_id" dataType="Int"/>
+			<field id="companies_ref" dataType="JSON"/>
+			<field id="company_id" dataType="Int"/>
+			<field id="person_url" dataType="String"/>
+			<field id="descr" dataType="String"/>
+			<field id="last_update" dataType="DateTimeTZ"/>
+			<field id="last_update_user" dataType="String"/>
+			<field id="qr_code_sent_date" dataType="DateTimeTZ"/>
+			<field id="banned" dataType="Bool"/>
+		</model>
+		<model id="UserSelect" parent="ModelSQL" dataTable="users_select_list" virtual="TRUE">
+			<defaultOrder>
+				<field id="descr"/>
+			</defaultOrder>
+			<field id="id" dataType="Int" primaryKey="TRUE"/>
+			<field id="descr" dataType="String"/>
+			<field id="company_id" dataType="String"/>
+		</model>
+		
+		<model id="UserDialog" parent="ModelSQL" dataTable="users_dialog" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE" alias="Код"/>
+			<field id="name" dataType="String"/>
+			<field id="name_full" dataType="Text"/>
+			<field id="snils" dataType="String"/>
+			<field id="post" dataType="String"/>
+			<field id="sex" dataType="String"/>
+			<field id="photo" dataType="JSON"/>
+			<field id="role_id" dataType="String"/>
+			<field id="create_dt" dataType="DateTimeTZ"/>
+			<field id="banned" dataType="Bool"/>
+			<field id="time_zone_locales_ref" dataType="JSON"/>
+			<field id="phone_cel" dataType="String"/>
+			<field id="tel_ext" dataType="String"/>
+			<field id="locale_id" dataType="String"/>
+			<field id="email_confirmed" dataType="Bool"/>
+			<field id="clients_ref" dataType="JSON"/>
+			<field id="companies_ref" dataType="JSON"/>
+			<field id="company_id" dataType="String"/>
+			<field id="viewed" dataType="Bool" defaultValue="FALSE"/>
+			<field id="qr_code" dataType="Text"/>
+			<globalFilter id="user_id" fieldId="id"/>
+		</model>
+		<model id="UserLogin" parent="ModelSQL" dataTable="users_login" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE" alias="Код"/>
+			<field id="name" dataType="String"/>
+			<field id="name_full" dataType="String"/>
+			<field id="snils" dataType="String"/>
+			<field id="post" dataType="String"/>
+			<field id="sex" dataType="String"/>
+			<field id="role_id" dataType="String"/>
+			<field id="create_dt" dataType="DateTimeTZ"/>
+			<field id="banned" dataType="Bool"/>
+			<field id="time_zone_locales_ref" dataType="JSON"/>
+			<field id="phone_cel" dataType="String"/>
+			<field id="tel_ext" dataType="String"/>
+			<field id="locale_id" dataType="String"/>
+			<field id="email_confirmed" dataType="Bool"/>
+			<field id="pwd" dataType="String"/>
+			<field id="ban_hash" dataType="String"/>
+			<field id="person_url" dataType="String"/>
+			<field id="client_id" dataType="Int"/>
+			<field id="company_id" dataType="Int"/>
+			<field id="company_descr" dataType="String"/>
+			<field id="client_banned" dataType="Bool"/>
+			<field id="descr" dataType="String"/>
+		</model>
+		
+		<model id="UserProfile" parent="ModelSQL" dataTable="users_profile" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE" alias="Код"/>
+			<field id="name" dataType="String"/>
+			<field id="name_full" dataType="String"/>
+			<field id="snils" dataType="String"/>
+			<field id="post" dataType="String"/>
+			<field id="sex" dataType="String"/>
+			<field id="phone_cel" dataType="String" alias="Телефон"/>
+			<field id="locale_id" dataType="String"/>
+			<field id="time_zone_locales_ref" dataType="JSON"/>
+			<field id="person_url" dataType="String"/>
+			<field id="companies_ref" dataType="JSON"/>
+			<field id="qr_code" dataType="Text"/>
+			<globalFilter id="user_id" fieldId="id"/>
+		</model>
+		<model id="UserMacAddress" parent="ModelSQLBeton" dataTable="user_mac_addresses" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE"/>
+			<field id="user_id" dataType="Int" refTable="users" refField="id"/>
+			<field id="mac_address" dataType="String" length="17" required="TRUE"/>
+			<field id="mac_address_hash" dataType="String" length="32" dbRequired="TRUE"/>
+			<index id="user_mac_addresses_user_index">
+				<field id="user_id"/>
+			</index>
+			<index id="user_mac_addresses_mac_address_index" unique="TRUE">
+				<field id="mac_address"/>
+			</index>
+			<index id="user_mac_addresses_hash_idx" unique="TRUE">
+				<field id="mac_address_hash"/>
+			</index>			
+		</model>
+		<model id="UserMacAddressList" parent="ModelSQLBeton" dataTable="user_mac_addresses_list" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE"/>
+			<field id="user_id" dataType="Int"/>
+			<field id="user_descr" dataType="String"/>
+			<field id="mac_address" dataType="String" length="17" required="TRUE"/>
+			<field id="user_company_id" dataType="Int"/>
+		</model>
+		
+		<model id="Session" parent="ModelSQL" dataTable="sessions" virtual="FALSE">
+			<field id="id" dataType="String" length="128" primaryKey="TRUE" autoInc="FALSE" dbRequired="TRUE"/>
+			<field id="set_time" dataType="DateTimeTZ" defaultValue="CURRENT_TIMESTAMP"/>
+			<field id="data" dataType="Text"/>
+			<field id="session_key" dataType="String" length="128"/>
+			<field id="pub_key" dataType="String" length="15"/>
+			<field id="data_enc" dataType="Bytea"/>
+			<index id="sessions_pub_key_idx">
+				<field id="pub_key"/>
+			</index>			
+			<index id="sessions_set_time_idx">
+				<field id="set_time"/>
+			</index>
+		</model>
+		
+		<model id="Login" parent="ModelSQL" dataTable="logins" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" required="FALSE"/>
+			<field id="date_time_in" dataType="DateTimeTZ"/>
+			<field id="date_time_out" dataType="DateTimeTZ"/>
+			<field id="ip" dataType="String" length="15"/>
+			<field id="session_id" dataType="String" length="128"/>
+			<field id="user_id" dataType="Int"/>
+			<field id="pub_key" dataType="String" length="15"/>
+			<field id="set_date_time" dataType="DateTimeTZ"/>
+			<field id="headers" dataType="JSONB"/>
+			<field id="user_agent" dataType="JSONB"/>
+			<index id="logins_session_idx">
+				<field id="session_id"/>
+			</index>
+			<index id="logins_user_idx">
+				<field id="user_id"/>
+			</index>
+			<index id="logins_pub_key_idx">
+				<field id="pub_key"/>
+			</index>
+		</model>
+		<model id="LoginList" parent="ModelSQL" dataTable="logins_list" virtual="TRUE">
+			<defaultOrder>
+				<field id="date_time_in" sortDirect="DESC"/>
+			</defaultOrder>
+		
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" required="FALSE" sysCol="TRUE"/>
+			<field id="date_time_in" dataType="DateTimeTZ" alias="Дата входа"/>
+			<field id="date_time_out" dataType="DateTimeTZ" alias="Дата выхода"/>
+			<field id="ip" dataType="String" length="15" alias="IP адрес"/>
+			<field id="user_id" dataType="Int" sysCol="TRUE"/>
+			<field id="users_ref" dataType="JSON" alias="Пользователь"/>
+			<field id="pub_key" dataType="String" length="15" sysCol="TRUE"/>
+			<field id="set_date_time" dataType="DateTimeTZ" alias="Время последнего обращения"/>
+			<field id="user_agent_descr" dataType="String"/>
+			<field id="user_agent" dataType="JSON"/>
+			<field id="headers" dataType="JSON"/>
+			
+		</model>
+		<model id="LoginDeviceList" parent="ModelSQLBeton" dataTable="login_devices_list" virtual="TRUE">
+			<defaultOrder>
+				<field id="date_time_in" sortDirect="DESC"/>
+			</defaultOrder>		
+			<field id="user_id" dataType="Int" sysCol="TRUE" primaryKey="TRUE"/>
+			<field id="user_agent" dataType="Text" primaryKey="TRUE"/>
+			<field id="user_descr" dataType="String" alias="Имя пользователя"/>
+			<field id="date_time_in" dataType="DateTimeTZ" alias="Дата входа"/>
+			<field id="banned" dataType="Bool" alias="Вход запрещен"/>
+			<field id="ban_hash" dataType="String"/>
+			<field id="user_company_id" dataType="Int" sysCol="TRUE"/>
+		</model>
+		<model id="LoginDeviceBan" parent="ModelSQLBeton" dataTable="login_device_bans" virtual="FALSE">
+			<field id="user_id" dataType="Int" sysCol="TRUE" primaryKey="TRUE"/>
+			<field id="hash" dataType="String" length="32" primaryKey="TRUE"/>
+			<field id="create_dt" dataType="DateTimeTZ" alias="Дата создания" defaultValue="CURRENT_TIMESTAMP"/>
+			<field id="user_company_id" dataType="Int" sysCol="TRUE"/>
+		</model>
+	
+		<model id="ConstantList" parent="ModelSQL" dataTable="constants_list_view" virtual="TRUE">
+			<defaultOrder>
+				<field id="name"/>
+			</defaultOrder>
+			<field id="id" dataType="String" primaryKey="TRUE"/>
+			<field id="name" dataType="String"/>
+			<field id="descr" dataType="Text"/>
+			<field id="val" dataType="Text"/>
+			<field id="val_type" dataType="Text"/>
+			<field id="ctrl_class" dataType="Text"/>
+			<field id="ctrl_options" dataType="JSON"/>
+			<field id="view_class" dataType="Text"/>
+			<field id="view_options" dataType="JSON"/>
+		</model>
+		<model id="View" parent="ModelSQL" dataTable="views" virtual="FALSE">
+			<defaultOrder>
+				<field id="section"/>
+				<field id="descr"/>
+			</defaultOrder>
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" required="FALSE" alias="Код"/>
+			<field id="c" dataType="Text"/>
+			<field id="f" dataType="Text"/>
+			<field id="t" dataType="Text"/>			
+			<field id="section" dataType="Text" required="TRUE"/>
+			<field id="descr" dataType="Text" required="TRUE"/>
+			<field id="limited" dataType="Bool"/>
+			<index id="views_section_descr_idx" unique="TRUE">
+				<field id="section"/>
+				<field id="descr"/>
+			</index>																		
+		</model>
+		<model id="ViewList" parent="ModelSQL" dataTable="views_list" virtual="TRUE">
+			<defaultOrder>
+				<field id="user_descr"/>
+			</defaultOrder>
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" required="FALSE" alias="Код"/>
+			<field id="c" dataType="Text"/>
+			<field id="f" dataType="Text"/>
+			<field id="t" dataType="Text"/>						
+			<field id="href" dataType="Text"/>
+			<field id="user_descr" dataType="Text"/>
+			<field id="section" dataType="Text"/>						
+		</model>
+		<model id="ViewSectionList" parent="ModelSQL" dataTable="views_section_list" virtual="TRUE">
+			<field id="section" dataType="Text"/>
+		</model>
+		
+		<model id="MainMenuConstructor" parent="ModelSQL" dataTable="main_menus" virtual="FALSE">
+			<defaultOrder>
+				<field id="role_id"/>
+			</defaultOrder>
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" alias="Код"/>
+			<field id="role_id" dataType="Enum" enumId="role_types" required="TRUE"/>
+			<field id="user_id" dataType="Int" refTable="users" refField="id"/>
+			<field id="content" dataType="Text" required="TRUE" alias="Содержание"/>
+			<field id="model_content" dataType="Text" required="FALSE" alias="Содержание для модели,заполняется при записи из контроллера!"/>
+			<index id="main_menus_role_user_idx" unique="TRUE">
+				<field id="role_id"/>
+				<field id="user_id"/>
+			</index>						
+		</model>
+		
+		<model id="MainMenuConstructorList" parent="ModelSQL" dataTable="main_menus_list" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE" sysCol="TRUE"/>
+			<field id="role_id" dataType="String"/>
+			<field id="role_descr" dataType="String"/>
+			<field id="user_id" dataType="String"/>
+			<field id="user_descr" dataType="String"/>
+			<field id="content" dataType="Text"/>
+		</model>
+		<model id="MainMenuConstructorDialog" parent="ModelSQL" dataTable="main_menus_dialog" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE" sysCol="TRUE"/>
+			<field id="role_id" dataType="String"/>
+			<field id="role_descr" dataType="String"/>
+			<field id="user_id" dataType="String"/>
+			<field id="user_descr" dataType="String"/>
+			<field id="content" dataType="Text"/>
+		</model>
+		
+		<model id="MainMenuContent" parentJS="ModelXMLTree" parent="Model" virtual="TRUE" server="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE"/>
+			<field id="descr" dataType="String"/>
+			<field id="viewid" dataType="String"/>
+			<field id="viewdescr" dataType="String"/>
+			<field id="default" dataType="Bool"/>
+			<field id="glyphclass" dataType="String"/>
+		</model>
+			
+		<model id="VariantStorage" parent="ModelSQL" dataTable="variant_storages" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE"/>
+			<field id="user_id" dataType="Int" refTable="users" refField="id"/>
+			<field id="storage_name" dataType="Text" required="TRUE"/>
+			<field id="variant_name" dataType="Text" required="TRUE"/>
+			<field id="default_variant" dataType="Bool"/>
+			<field id="filter_data" dataType="JSONB"/>
+			<field id="col_visib_data" dataType="Text"/>
+			<field id="col_order_data" dataType="Text"/>
+			<index id="variant_storages_user_idx" unique="TRUE">
+				<field id="user_id"/>
+				<field id="storage_name"/>
+			</index>
+		</model>
+		<model id="VariantStorageList" parent="ModelSQL" dataTable="variant_storages_list" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE"/>
+			<field id="user_id" dataType="Int" refTable="users" refField="id"/>
+			<field id="storage_name" dataType="Text"/>
+			<field id="default_variant" dataType="Bool"/>
+			<field id="variant_name" dataType="Text"/>
+		</model>
+
+		<model id="About" parent="ModelSQL" virtual="TRUE">
+			<field id="author" dataType="String"/>
+			<field id="tech_mail" dataType="String"/>
+			<field id="app_name" dataType="String"/>
+			<field id="fw_version" dataType="String"/>
+			<field id="app_version" dataType="String"/>
+			<field id="db_name" dataType="String"/>
+		</model>				
+		<model id="Client" parent="ModelSQL" dataTable="clients" virtual="FALSE" alias="Организации">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE"/>			
+			<field id="name" dataType="Text" required="TRUE"/>
+			<field id="inn" dataType="String" length="12" required="TRUE"/>
+			<field id="name_full" dataType="Text" alias="Полное наименование"/>
+			<field id="legal_address" dataType="Text" alias="Адрес юридический"/>
+			<field id="post_address" dataType="Text" alias="Адрес почтовый"/>
+			<field id="kpp" dataType="String" length="10" alias="КПП"/>
+			<field id="ogrn" dataType="String" length="15"/>
+			<field id="okpo" dataType="String" length="20"/>
+			<field id="okved" dataType="Text"/>
+			<field id="email" dataType="String" length="100"/>
+			<field id="tel" dataType="Text"/>
+			<field id="parent_id" dataType="Int" refTable="clients" refField="id" alias="Площадка"/>
+			<field id="viewed" dataType="Bool" defaultValue="FALSE"/>
+			<field id="create_user_id" dataType="Int" alias="Для отбора по client_admin2"/>
+			
+			<index id="clients_name_idx" unique="TRUE">
+				<expression>lower(name)</expression>
+			</index>
+			<index id="clients_inn_idx">
+				<field id="inn"/>
+			</index>
+			<index id="clients_ogrn_idx">
+				<field id="ogrn"/>
+			</index>
+			<index id="clients_parent_id_idx">
+				<field id="parent_id"/>
+			</index>
+			<constraint id="clients_clients_check" expression="clients_check(id,parent_id,inn,kpp,ogrn,name)"/>
+		</model>
+		<model id="ClientList" parent="ModelSQL" dataTable="clients_list" virtual="TRUE" alias="Площадка">
+			<defaultOrder>
+				<field id="viewed" sortDirect="ASC"/>
+				<field id="active" sortDirect="DESC"/>
+				<field id="name"/>				
+			</defaultOrder>
+			<field id="id" dataType="Int" primaryKey="TRUE"/>			
+			<field id="viewed" dataType="Bool" defaultValue="FALSE"/>
+			<field id="active" dataType="Bool"/>
+			<field id="name" dataType="Text"/>
+			<field id="inn" dataType="String"/>
+			<field id="ogrn" dataType="String"/>
+			<field id="parent_id" dataType="Int"/>
+			<field id="parents_ref" dataType="JSON"/>			
+			<field id="last_update" dataType="DateTimeTZ"/>
+			<field id="last_update_user" dataType="String"/>			
+			<field id="create_user_id" dataType="Int" alias="Для отбора по client_admin2"/>
+			<field id="no_parent" dataType="Bool" alias="Это площадка (для отбора)"/>
+			<globalFilter id="client_id" fieldId="id"/>
+		</model>
+		<model id="ClientDialog" parent="ModelSQL" dataTable="clients_dialog" virtual="TRUE" alias="Площадка">
+			<field id="id" dataType="Int" primaryKey="TRUE"/>			
+			<field id="name" dataType="Text"/>
+			<field id="inn" dataType="String"/>
+			<field id="name_full" dataType="Text"/>
+			<field id="legal_address" dataType="Text"/>
+			<field id="post_address" dataType="Text"/>
+			<field id="kpp" dataType="String"/>
+			<field id="ogrn" dataType="String"/>
+			<field id="okpo" dataType="String"/>
+			<field id="okved" dataType="Text"/>
+			<field id="email" dataType="String"/>
+			<field id="tel" dataType="Text"/>
+			<field id="parents_ref" dataType="JSON"/>
+			<field id="parent_id" dataType="Int"/>
+			<field id="viewed" dataType="Bool" defaultValue="FALSE"/>
+			<field id="create_user_id" dataType="Int" alias="Для отбора по client_admin2"/>
+			<globalFilter id="client_id" fieldId="id"/>
+		</model>
+		
+		<model id="ClientAccess" parent="ModelSQL" dataTable="client_accesses" virtual="FALSE" alias="Доступы площадок">
+			<field id="id" dataType="Int" primaryKey="TRUE" required="FALSE" autoInc="TRUE"/>			
+			<field id="client_id" dataType="Int" refTable="clients" refField="id" alias="Площадка"/>
+			<field id="date_from" dataType="DateTimeTZ" alias="Дата начала действия"/>
+			<field id="date_to" dataType="DateTimeTZ" alias="Дата окончания действия"/>
+			<field id="doc_1c_ref" dataType="JSONB" alias="Ссылка на документ 1с"/>
+			<index id="client_accesses_client_idx">
+				<field id="client_id"/>
+			</index>
+			<index id="client_accesses_date_to_idx">
+				<field id="date_to"/>
+			</index>
+			<index id="client_accesses_doc_1c_ref_idx">
+				<expression>(doc_1c_ref-&gt;&gt;'ref'),(doc_1c_ref-&gt;&gt;'payed')</expression>
+			</index>
+			
+		</model>
+		<model id="ClientAccessList" parent="ModelSQL" dataTable="client_accesses_list" virtual="TRUE" alias="Доступы площадок">
+			<defaultOrder>
+				<field id="date_to" sortDirect="DESC"/>
+			</defaultOrder>		
+			<field id="id" dataType="Int" primaryKey="TRUE"/>			
+			<field id="clients_ref" dataType="JSON"/>
+			<field id="client_id" dataType="Int"/>
+			<field id="date_from" dataType="DateTimeTZ" alias="Дата начала действия"/>
+			<field id="date_to" dataType="DateTimeTZ" alias="Дата окончания действия"/>
+			<field id="doc_1c_ref" dataType="JSONB" alias="Данные 1с"/>
+		</model>
+		
+		<model id="StudyDocumentRegister" parent="ModelSQL" dataTable="study_document_registers" virtual="FALSE" alias="Реестр">
+			<field id="id" dataType="Int" primaryKey="TRUE" required="FALSE" autoInc="TRUE"/>			
+			<field id="name" dataType="Text"/>
+			<field id="issue_date" dataType="Date" alias="Дата"/>
+			<field id="company_id" dataType="Int" refTable="clients" refField="id" alias="Площадка"/>
+			<field id="create_type" dataType="Enum" enumId="doc_create_types" alias="Вид создания"/>
+			<field id="digital_sig" dataType="JSONB" alias="ПЭП"/>
+			<field id="create_user_id" dataType="Int" alias="Для отбора по client_admin2"/>
+			<field id="study_form" dataType="Text" alias="Форма обучения"/>
+			<index id="study_document_registers_company_idx">
+				<field id="company_id"/>
+			</index>
+			<index id="study_document_registers_issue_date_idx">
+				<field id="issue_date"/>
+			</index>
+			<index id="study_document_create_user_idx">
+				<field id="create_user_id"/>
+			</index>
+			<index id="study_document_registers_name_idx">
+				<expression>lower(name)</expression>
+			</index>			
+			<index id="study_document_registers_study_form_idx">
+				<expression>lower(study_form)</expression>
+			</index>			
+			
+		</model>
+		<model id="StudyDocumentRegisterList" parent="ModelSQL" dataTable="study_document_registers_list" virtual="TRUE" alias="Реестр">
+			<defaultOrder>
+				<field id="issue_date" sortDirect="DESC"/>
+			</defaultOrder>					
+			<field id="id" dataType="Int" primaryKey="TRUE"/>			
+			<field id="name" dataType="String"/>
+			<field id="issue_date" dataType="Date" alias="Дата"/>
+			<field id="company_id" dataType="Int"/>
+			<field id="companies_ref" dataType="JSON"/>
+			<field id="client_id" dataType="Int"/>
+			<field id="clients_ref" dataType="JSON"/>
+			<field id="create_type" dataType="String"/>
+			<field id="digital_sig" dataType="JSONB" alias="ПЭП"/>
+			<field id="self_descr" dataType="String"/>
+			<field id="last_update" dataType="DateTimeTZ"/>
+			<field id="last_update_user" dataType="String"/>			
+			<field id="create_user_id" dataType="Int" alias="Для отбора по client_admin2"/>
+			<field id="study_document_count" dataType="Int"/>
+			<field id="organization" dataType="String"/>
+			<field id="study_form" dataType="String"/>
+		</model>
+		<model id="StudyDocumentRegisterDialog" parent="ModelSQL" dataTable="study_document_registers_dialog" virtual="TRUE" alias="Реестр">
+			<field id="id" dataType="Int" primaryKey="TRUE"/>						
+			<field id="name" dataType="String"/>
+			<field id="issue_date" dataType="Date" alias="Дата"/>
+			<field id="companies_ref" dataType="JSON"/>
+			<field id="clients_ref" dataType="JSON"/>
+			<field id="create_type" dataType="String"/>
+			<field id="digital_sig" dataType="JSONB" alias="ПЭП"/>
+			<field id="attachments" dataType="JSONB"/>
+			<field id="create_user_id" dataType="Int" alias="Для отбора по client_admin2"/>
+			<field id="study_form" dataType="String"/>
+		</model>
+		
+		<model id="StudyDocument" parent="ModelSQL" dataTable="study_documents" virtual="FALSE" alias="Паспорт обученности">
+			<field id="id" dataType="Int" primaryKey="TRUE" required="FALSE" autoInc="TRUE"/>
+			<field id="company_id" dataType="Int" refTable="clients" refField="id" alias="Площадка"/>
+			<field id="study_document_register_id" dataType="Int" refTable="study_document_registers" refField="id" alias="Реестр"/>
+			<field id="user_id" dataType="Int" refTable="users" refField="id" dbRequired="TRUE" alias="Пользователь"/>			
+			<field id="snils" dataType="String" length="11" alias="СНИЛС" required="TRUE"/>
+			<field id="issue_date" dataType="Date" alias="Дата выдачи"/>
+			<field id="end_date" dataType="Date" alias="Дата окончания"/>
+			<field id="post" dataType="Text" alias="Аттестуемая должность"/>
+			<field id="work_place" dataType="Text" alias="Место работы"/>
+			<field id="organization" dataType="Text" alias="Аттестуемая организация"/>
+			<field id="study_type" dataType="Text" alias="Вид обучения"/>
+			<field id="series" dataType="Text" alias="Серия документа"/>
+			<field id="number" dataType="Text" alias="Номер документа"/>
+			<field id="study_prog_name" dataType="Text" alias="Наименование программы проф.обучения"/>
+			<field id="profession" dataType="Text" alias="Наименование профессии (для заполнения ФИСФРДО)"/>
+			<field id="reg_number" dataType="Text" alias="Регистрационный номер документа"/>
+			<field id="study_period" dataType="Text" alias="Срок обучения"/>
+			<field id="name_first" dataType="Text" alias="Имя физлица"/>
+			<field id="name_second" dataType="Text" alias="Фамилия физлица"/>
+			<field id="name_middle" dataType="Text" alias="Отчество физлица"/>
+			<field id="qualification_name" dataType="Text" alias="Наименование квалификации"/>			
+			<field id="create_type" dataType="Enum" enumId="doc_create_types" alias="Вид создания"/>						
+			<field id="digital_sig" dataType="JSONB" alias="ПЭП"/>
+			<field id="name_full" dataType="Text" alias="ФИО для индекса, заполняется триггером"/>
+			<field id="create_user_id" dataType="Int" alias="Для отбора по client_admin2"/>
+			<field id="study_form" dataType="Text" alias="Форма обучения"/>			
+			<index id="study_documents_company_idx">
+				<field id="company_id"/>
+			</index>
+			<index id="study_documents_register_idx">
+				<field id="study_document_register_id"/>
+			</index>
+			<index id="study_documents_user_idx">
+				<field id="user_id"/>
+			</index>
+			<index id="study_documents_issue_date_idx">
+				<field id="issue_date"/>
+			</index>			
+			<index id="study_documents_end_date_idx">
+				<field id="end_date"/>
+			</index>			
+			<index id="study_documents_create_user_id_idx">
+				<field id="create_user_id"/>
+			</index>			
+			
+			<index id="study_documents_post_idx" type="gin">
+				<expression>post gin_trgm_ops</expression>
+			</index>			
+			<index id="study_documents_work_place_idx" type="gin">
+				<expression>work_place gin_trgm_ops</expression>
+			</index>			
+			<index id="study_documents_organization_idx" type="gin">
+				<expression>organization gin_trgm_ops</expression>
+			</index>			
+			<index id="study_documents_study_type_idx" type="gin">
+				<expression>study_type gin_trgm_ops</expression>
+			</index>			
+			<index id="study_documents_series_idx" type="gin">
+				<expression>series gin_trgm_ops</expression>
+			</index>			
+			<index id="study_documents_number_idx" type="gin">
+				<expression>number gin_trgm_ops</expression>
+			</index>			
+			<index id="study_documents_study_period_idx" type="gin">
+				<expression>study_period gin_trgm_ops</expression>
+			</index>			
+			<index id="study_documents_name_second_idx" type="gin">
+				<expression>name_second gin_trgm_ops</expression>
+			</index>			
+			<index id="study_documents_name_full_idx" type="gin">
+				<expression>name_full gin_trgm_ops</expression>
+			</index>			
+			<index id="study_documents_study_form_idx" type="gin">
+				<expression>study_form gin_trgm_ops</expression>
+			</index>			
+			
+		</model>
+		
+		<model id="StudyDocumentList" parent="ModelSQL" dataTable="study_documents_list" virtual="TRUE" alias="Паспорт обученности">
+			<defaultOrder>
+				<field id="issue_date" sortDirect="DESC"/>
+			</defaultOrder>	
+			<field id="id" dataType="Int" primaryKey="TRUE"/>
+			<field id="company_id" dataType="Int"/>
+			<field id="companies_ref" dataType="JSON"/>			
+			<field id="client_id" dataType="Int"/>
+			<field id="clients_ref" dataType="JSON"/>
+			<field id="study_document_register_id" dataType="Int"/>
+			<field id="study_document_registers_ref" dataType="JSON"/>
+			<field id="user_id" dataType="Int"/>
+			<field id="users_ref" dataType="JSON"/>
+			<field id="snils" dataType="String"/>
+			<field id="issue_date" dataType="Date"/>
+			<field id="end_date" dataType="Date" alias="Дата окончания"/>
+			<field id="post" dataType="Text" alias="Аттестуемая должность"/>
+			<field id="work_place" dataType="Text" alias="Место работы"/>
+			<field id="organization" dataType="Text" alias="Аттестуемая организация"/>
+			<field id="study_type" dataType="Text" alias="Вид обучения"/>
+			<field id="series" dataType="String" length="50" alias="Серия документа"/>
+			<field id="number" dataType="String" length="50" alias="Номер документа"/>
+			<field id="study_prog_name" dataType="Text" alias="Наименование программы проф.обучения"/>
+			<field id="profession" dataType="Text" alias="Наименование профессии (для заполнения ФИСФРДО)"/>
+			<field id="reg_number" dataType="Text" alias="Регистрационный номер документа"/>
+			<field id="study_period" dataType="Text" alias="Срок обучения"/>
+			<field id="name_first" dataType="Text" alias="Имя физлица"/>
+			<field id="name_second" dataType="Text" alias="Фамилия физлица"/>
+			<field id="name_middle" dataType="Text" alias="Отчество физлица"/>
+			<field id="qualification_name" dataType="Text" alias="Наименование квалификации"/>			
+			<field id="study_form" dataType="Text" alias="Форма обучения"/>			
+			<field id="create_type" dataType="String"/>						
+			<field id="digital_sig" dataType="JSONB" alias="ПЭП"/>
+			<field id="self_descr" dataType="String"/>					
+			<field id="last_update" dataType="DateTimeTZ"/>
+			<field id="last_update_user" dataType="String"/>
+			<field id="overdue" dataType="Bool"/>
+			<field id="month_left" dataType="Bool"/>
+			<field id="name_full" dataType="Text" alias="Физлицо"/>
+			<field id="create_user_id" dataType="Int" alias="Для отбора по client_admin2"/>
+			<globalFilter id="user_id" fieldId="user_id"/>
+		</model>
+		<model id="StudyDocumentWithPictList" parent="ModelSQL" dataTable="study_document_with_pict_list" virtual="TRUE" alias="Паспорт обученности">
+			<defaultOrder>
+				<field id="issue_date" sortDirect="DESC"/>
+			</defaultOrder>	
+			<field id="id" dataType="Int" primaryKey="TRUE"/>
+			<field id="client_id" dataType="Int"/>
+			<field id="clients_ref" dataType="JSON"/>
+			<field id="company_id" dataType="Int"/>
+			<field id="companies_ref" dataType="JSON"/>
+			<field id="study_document_register_id" dataType="Int"/>
+			<field id="study_document_registers_ref" dataType="JSON"/>
+			<field id="user_id" dataType="Int"/>
+			<field id="users_ref" dataType="JSON"/>
+			<field id="snils" dataType="String"/>
+			<field id="issue_date" dataType="Date"/>
+			<field id="end_date" dataType="Date" alias="Дата окончания"/>
+			<field id="post" dataType="Text" alias="Аттестуемая должность"/>
+			<field id="work_place" dataType="Text" alias="Место работы"/>
+			<field id="organization" dataType="Text" alias="Аттестуемая организация"/>
+			<field id="study_type" dataType="Text" alias="Вид обучения"/>
+			<field id="series" dataType="String" length="50" alias="Серия документа"/>
+			<field id="number" dataType="String" length="50" alias="Номер документа"/>
+			<field id="study_prog_name" dataType="Text" alias="Наименование программы проф.обучения"/>
+			<field id="profession" dataType="Text" alias="Наименование профессии (для заполнения ФИСФРДО)"/>
+			<field id="reg_number" dataType="Text" alias="Регистрационный номер документа"/>
+			<field id="study_period" dataType="Text" alias="Срок обучения"/>
+			<field id="name_first" dataType="Text" alias="Имя физлица"/>
+			<field id="name_second" dataType="Text" alias="Фамилия физлица"/>
+			<field id="name_middle" dataType="Text" alias="Отчество физлица"/>
+			<field id="qualification_name" dataType="Text" alias="Наименование квалификации"/>			
+			<field id="create_type" dataType="String"/>						
+			<field id="self_descr" dataType="String"/>					
+			<field id="digital_sig" dataType="JSONB" alias="ПЭП"/>
+			<field id="attachments" dataType="JSONB"/>
+			<field id="name_full" dataType="Text" alias="Физлицо"/>
+			<globalFilter id="user_id" fieldId="user_id"/>
+		</model>
+
+		<model id="StudyDocumentDialog" parent="ModelSQL" dataTable="study_documents_dialog" virtual="TRUE" alias="Паспорт обученности">
+			<field id="id" dataType="Int" primaryKey="TRUE"/>
+			<field id="clients_ref" dataType="JSON"/>
+			<field id="companies_ref" dataType="JSON"/>
+			<field id="study_document_registers_ref" dataType="JSON"/>
+			<field id="user_id" dataType="Int"/>
+			<field id="users_ref" dataType="JSON"/>
+			<field id="snils" dataType="String"/>
+			<field id="issue_date" dataType="Date"/>
+			<field id="end_date" dataType="Date" alias="Дата окончания"/>
+			<field id="post" dataType="Text" alias="Аттестуемая должность"/>
+			<field id="work_place" dataType="Text" alias="Место работы"/>
+			<field id="organization" dataType="Text" alias="Аттестуемая организация"/>
+			<field id="study_type" dataType="Text" alias="Вид обучения"/>
+			<field id="series" dataType="String" length="50" alias="Серия документа"/>
+			<field id="number" dataType="String" length="50" alias="Номер документа"/>
+			<field id="study_prog_name" dataType="Text" alias="Наименование программы проф.обучения"/>
+			<field id="profession" dataType="Text" alias="Наименование профессии (для заполнения ФИСФРДО)"/>
+			<field id="reg_number" dataType="Text" alias="Регистрационный номер документа"/>
+			<field id="study_period" dataType="Text" alias="Срок обучения"/>
+			<field id="name_first" dataType="Text" alias="Имя физлица"/>
+			<field id="name_second" dataType="Text" alias="Фамилия физлица"/>
+			<field id="name_middle" dataType="Text" alias="Отчество физлица"/>
+			<field id="qualification_name" dataType="Text" alias="Наименование квалификации"/>			
+			<field id="study_form" dataType="Text" alias="Форма обучения"/>			
+			<field id="create_type" dataType="String"/>						
+			<field id="digital_sig" dataType="JSONB" alias="ПЭП"/>
+			<field id="attachments" dataType="JSONB"/>
+			<field id="create_user_id" dataType="Int" alias="Для отбора по client_admin2"/>
+			<globalFilter id="user_id" fieldId="user_id"/>
+		</model>
+		<model id="StudyDocumentUploadUserOrder" parent="ModelSQL" dataTable="study_document_upload_user_orders" virtual="FALSE" alias="Служебная таблица, кэш колонок пользователя">
+			<field id="user_id" dataType="Int" primaryKey="TRUE" required="TRUE" autoInc="FALSE" refTable="users" refField="id"/>			
+			<field id="fields" dataType="JSON"/>
+			<field id="analyze_count" dataType="Int"/>
+		</model>
+		<model id="StudyDocumentRegisterUploadUserOrder" parent="ModelSQL" dataTable="study_document_register_upload_user_orders" virtual="FALSE" alias="Служебная таблица, кэш колонок пользователя">
+			<field id="user_id" dataType="Int" primaryKey="TRUE" required="TRUE" autoInc="FALSE" refTable="users" refField="id"/>			
+			<field id="fields" dataType="JSON"/>
+			<field id="analyze_count" dataType="Int"/>
+		</model>
+		
+		<model id="ObjectModLog" parent="ModelSQL" dataTable="object_mod_log" virtual="FALSE" alias="Журнал изменения объектов">
+			<defaultOrder>
+				<field id="date_time" sortDirect="DESC"/>
+			</defaultOrder>	
+			<field id="id" dataType="Int" primaryKey="TRUE" required="FALSE" autoInc="TRUE"/>						
+			<field id="object_type" dataType="Enum" enumId="data_types" required="TRUE" alias="Вид объекта"/>
+			<field id="object_id" dataType="Int" required="TRUE" alias="Идентификатор объекта"/>
+			<field id="object_descr" dataType="Text" required="TRUE" alias="Представление объекта"/>
+			<field id="user_descr" dataType="Text" alias="Пользователь"/>
+			<field id="date_time" dataType="DateTimeTZ" alias="Дата"/>
+			<field id="action" dataType="Enum" enumId="object_mod_actions" alias="Действие"/>
+			<field id="details" dataType="Text" alias="Подробности"/>
+			<index id="object_mod_log_date_time_idx">
+				<field id="date_time"/>
+			</index>
+			<index id="object_mod_log_user_descr_idx">
+				<field id="user_descr"/>
+			</index>			
+			<index id="object_mod_log_object_type_idx">
+				<field id="object_type"/>
+			</index>			
+			<index id="object_mod_log_object_id_idx">
+				<field id="object_id"/>
+			</index>			
+			
+		</model>
+		
+		<model id="StudyDocumentAttachment" parent="ModelSQL" dataTable="study_document_attachments" virtual="FALSE" alias="Вложения документов">
+			<field id="id" dataType="Int" primaryKey="TRUE" required="FALSE" autoInc="TRUE"/>			
+			<field id="date_time" dataType="DateTimeTZ" defaultValue="CURRENT_TIMESTAMP"/>			
+			<field id="study_documents_ref" dataType="JSONB"/>			
+			<field id="content_info" dataType="JSONB"/>
+			<field id="content_data" dataType="Bytea"/>
+			<field id="content_preview" dataType="Bytea"/>
+			<index id="study_document_attachments_idx">
+				<expression>(study_documents_ref-&gt;&gt;'dataType'),((study_documents_ref-&gt;'keys'-&gt;&gt;'id')::int)</expression>
+			</index>
+		</model>
+		<model id="StudyDocumentAttachmentList" parent="ModelSQL" dataTable="study_document_attachments_list" virtual="TRUE" alias="Вложения документов">
+			<defaultOrder>
+				<field id="date_time" sortDirect="DESC"/>
+			</defaultOrder>				
+			<field id="id" dataType="Int" primaryKey="TRUE" required="FALSE" autoInc="TRUE"/>			
+			<field id="date_time" dataType="DateTimeTZ"/>			
+			<field id="study_documents_ref" dataType="JSONB"/>			
+			<field id="content_info" dataType="JSONB"/>
+			<field id="content_preview" dataType="String"/>
+		</model>
+		<model id="DadataCache" parent="ModelSQL" dataTable="dadata_cache" virtual="FALSE" alias="Dadata cache">
+			<field id="query" dataType="Text" primaryKey="TRUE" required="TRUE" autoInc="FALSE"/>			
+			<field id="response" dataType="JSON"/>			
+		</model>
+		<model id="Constant_study_document_fields" parentJS="ModelJSON" virtual="TRUE" server="FALSE">
+			<field id="name" dataType="String" primaryKey="TRUE" autoInc="FALSE"/>
+			<field id="descr" dataType="String"/>
+			<field id="dataType" dataType="String"/>
+			<field id="maxLength" dataType="Int"/>
+			<field id="required" dataType="Bool"/>
+		</model>
+		<model id="Constant_study_document_register_fields" parentJS="ModelJSON" virtual="TRUE" server="FALSE">
+			<field id="name" dataType="String" primaryKey="TRUE" autoInc="FALSE"/>
+			<field id="descr" dataType="String"/>
+			<field id="dataType" dataType="String"/>
+			<field id="maxLength" dataType="Int"/>
+			<field id="required" dataType="Bool"/>
+		</model>
+		
+		<model id="UserOperation" parent="ModelSQL" dataTable="user_operations" virtual="FALSE" alias="Dadata cache">
+			<field id="user_id" dataType="Int" primaryKey="TRUE" required="TRUE" autoInc="FALSE"/>
+			<field id="operation_id" dataType="String" length="32" primaryKey="TRUE" required="TRUE" autoInc="FALSE"/>						
+			<field id="operation" dataType="Text"/>
+			<field id="status" dataType="Text"/>
+			<field id="date_time" dataType="DateTimeTZ" defaultValue="CURRENT_TIMESTAMP"/>												
+			<field id="error_text" dataType="Text"/>
+			<field id="comment_text" dataType="Text"/>
+			<field id="date_time_end" dataType="DateTimeTZ"/>
+			<field id="file_content" dataType="Bytea"/>																								
+		</model>
+		<model id="UserOperationDialog" parent="ModelSQL" dataTable="user_operations_dialog" virtual="TRUE" alias="Dadata cache">
+			<field id="user_id" dataType="Int" primaryKey="TRUE" required="TRUE" autoInc="FALSE"/>
+			<field id="operation_id" dataType="String" length="32" primaryKey="TRUE" required="TRUE" autoInc="FALSE"/>						
+			<field id="operation" dataType="Text"/>
+			<field id="status" dataType="Text"/>
+			<field id="date_time" dataType="DateTimeTZ" defaultValue="CURRENT_TIMESTAMP"/>												
+			<field id="error_text" dataType="Text"/>
+			<field id="comment_text" dataType="Text"/>
+			<field id="date_time_end" dataType="DateTimeTZ"/>
+			<field id="file_content_exists" dataType="Bool"/>
+		</model>
+		
+		<model id="MailMessage" parent="ModelSQL" dataTable="mail_messages" virtual="FALSE">
+			<defaultOrder>
+				<field id="date_time" sortDirect="DESC"/>
+			</defaultOrder>			
+			<field id="id" dataType="Int" primaryKey="TRUE" required="TRUE" autoInc="TRUE"/>
+			<field id="date_time" dataType="DateTime" defaultValue="current_timestamp"/>
+			<field id="from_addr" dataType="String" length="50"/>
+			<field id="from_name" dataType="String" length="255"/>
+			<field id="to_addr" dataType="String" length="50"/>
+			<field id="to_name" dataType="String" length="255"/>
+			<field id="reply_addr" dataType="String" length="50"/>
+			<field id="reply_name" dataType="String" length="255"/>
+			<field id="body" dataType="Text"/>
+			<field id="sender_addr" dataType="String" length="50"/>
+			<field id="subject" dataType="String" length="255"/>
+			<field id="sent" dataType="Bool" defaultValue="false"/>
+			<field id="sent_date_time" dataType="DateTime"/>
+			<field id="mail_type" dataType="Enum" enumId="mail_types"/>			
+			<field id="error_str" dataType="Text"/>
+			<index id="mail_messages_date_time_idx" unique="FALSE">
+				<field id="date_time"/>
+			</index>
+			<index id="mail_messages_email_type_idx" unique="FALSE">
+				<field id="email_type"/>
+			</index>
+			<index id="mail_messages_to_addr_idx" type="gin">
+				<expression>to_addr gin_trgm_ops</expression>
+			</index>			
+			<index id="mail_messages_to_name_idx" type="gin">
+				<expression>to_name gin_trgm_ops</expression>
+			</index>			
+			<index id="mail_messages_subject_idx" type="gin">
+				<expression>subject gin_trgm_ops</expression>
+			</index>			
+			<index id="mail_messages_error_str_idx" type="gin">
+				<expression>error_str gin_trgm_ops</expression>
+			</index>						
+		</model>
+		<model id="MailMessageList" parent="ModelSQL" dataTable="mail_messages_list" virtual="TRUE">
+			<defaultOrder>
+				<field id="date_time" sortDirect="DESC"/>
+			</defaultOrder>			
+			<field id="id" dataType="Int" primaryKey="TRUE" required="TRUE" autoInc="TRUE"/>
+			<field id="date_time" dataType="DateTime" defaultValue="current_timestamp"/>
+			<field id="from_addr" dataType="String" length="50"/>
+			<field id="from_name" dataType="String" length="255"/>
+			<field id="to_addr" dataType="String" length="50"/>
+			<field id="to_name" dataType="String" length="255"/>
+			<field id="reply_addr" dataType="String" length="50"/>
+			<field id="reply_name" dataType="String" length="255"/>
+			<field id="body_begin" dataType="Text"/>
+			<field id="sender_addr" dataType="String" length="50"/>
+			<field id="subject" dataType="String" length="255"/>
+			<field id="sent" dataType="Bool" defaultValue="false"/>
+			<field id="sent_date_time" dataType="DateTime"/>
+			<field id="mail_type" dataType="Enum" enumId="mail_types"/>			
+			<field id="error_str" dataType="Text"/>
+			<field id="attachment_count" dataType="Int"/>
+		</model>
+		
+		<model id="MailMessageAttachment" parent="ModelSQL" dataTable="mail_message_attachments" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" required="TRUE"/>
+			<field id="mail_message_id" dataType="Int" refTable="mail_messages" refField="id"/>
+			<field id="file_name" dataType="String" length="255"/>
+			<index id="mail_message_attachments_mail_id_index" unique="FALSE">
+				<field id="mail_message_id"/>
+			</index>
+		</model>
+		<model id="MailTemplate" parent="ModelSQL" dataTable="mail_templates" virtual="FALSE">
+			<defaultOrder>
+				<field id="mail_type"/>
+			</defaultOrder>
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" required="FALSE"/>
+			<field id="mail_type" dataType="Enum" primaryKey="FALSE" enumId="mail_types" autoInc="FALSE" required="TRUE" alias="Тип email"/>
+			<field id="template" dataType="Text" required="TRUE" alias="Шаблон"/>
+			<field id="comment_text" dataType="Text" required="TRUE" alias="Комментарий"/>
+			<field id="mes_subject" dataType="Text" required="TRUE" alias="Тема"/>
+			<field id="fields" dataType="JSON" required="TRUE" alias="Поля"/>
+			<index id="mail_templates_type_idx" unique="TRUE">
+				<field id="mail_type"/>
+			</index>
+		</model>
+		<model id="MailTemplateList" parent="ModelSQL" dataTable="mail_templates_list" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE"/>
+			<field id="mail_type" dataType="String"/>
+			<field id="template" dataType="Text"/>
+		</model>
+		<model id="ReportTemplateField" parentJS="ModelJSON" virtual="TRUE" server="FALSE">
+			<field id="id" dataType="String" length="50" primaryKey="TRUE"/>
+			<field id="descr" dataType="String"/>
+		</model>
+		<model id="APIObject" parent="ModelSQL" dataTable="api_objects" virtual="FALSE">
+			<field id="uuid" dataType="String" length="36" primaryKey="TRUE" autoInc="FALSE" required="TRUE"/>
+			<field id="obj" dataType="JSONB" required="TRUE"/>
+		</model>
+		<model id="StudyDocumentInsertHead" parent="ModelSQL" dataTable="study_document_insert_heads" virtual="FALSE" alias="Паспорт обученности (добавление)">
+			<field id="id" dataType="Int" primaryKey="TRUE" required="FALSE" autoInc="TRUE"/>			
+			<field id="user_id" dataType="Int" refTable="users" refField="id" alias="Пользователь" dbRequired="TRUE"/>
+			<field id="company_id" dataType="Int" refTable="clients" refField="id" alias="Компания"/>
+			<field id="register_date" dataType="Date" alias="Дата протокола"/>
+			<field id="register_name" dataType="Text" alias="Наименование протокола"/>			
+			<field id="common_issue_date" dataType="Date" alias="Дата выдачи"/>
+			<field id="common_end_date" dataType="Date" alias="Дата окончания"/>
+			<field id="common_post" dataType="Text" alias="Аттестуемая должность"/>
+			<field id="common_work_place" dataType="Text" alias="Место работы"/>
+			<field id="common_organization" dataType="Text" alias="Аттестуемая организация"/>
+			<field id="common_study_type" dataType="Text" alias="Вид обучения"/>
+			<field id="common_series" dataType="String" length="50" alias="Серия документа"/>
+			<field id="common_study_prog_name" dataType="Text" alias="Наименование программы проф.обучения"/>
+			<field id="common_profession" dataType="Text" alias="Наименование профессии (для заполнения ФИСФРДО)"/>
+			<field id="common_study_period" dataType="Text" alias="Срок обучения"/>
+			<field id="common_qualification_name" dataType="Text" alias="Наименование квалификации"/>			
+			<field id="common_study_form" dataType="Text" alias="Форма обучения"/>
+			
+			<index id="study_document_insert_heads_user_idx">
+				<field id="user_id"/>
+			</index>
+			<globalFilter id="user_id" fieldId="user_id"/>			
+		</model>		
+		<model id="StudyDocumentInsertHeadList" parent="ModelSQL" dataTable="study_document_insert_heads_list" virtual="TRUE" alias="Паспорт обученности (добавление)">
+			<defaultOrder>
+				<field id="register_date" sortDirect="DESC"/>
+			</defaultOrder>		
+			<field id="id" dataType="Int" primaryKey="TRUE" required="FALSE" autoInc="TRUE"/>			
+			<field id="user_id" dataType="Int"/>
+			<field id="company_id" dataType="Int"/>
+			<field id="companies_ref" dataType="JSON"/>
+			<field id="register_date" dataType="Date" alias="Дата протокола"/>
+			<field id="register_name" dataType="Text" alias="Наименование протокола"/>
+			<field id="register_attachment" dataType="JSON"/>
+			<field id="study_document_count" dataType="Int"/>
+			<field id="common_issue_date" dataType="Date" alias="Дата выдачи"/>
+			<field id="common_end_date" dataType="Date" alias="Дата окончания"/>
+			<field id="common_post" dataType="Text" alias="Аттестуемая должность"/>
+			<field id="common_work_place" dataType="Text" alias="Место работы"/>
+			<field id="common_organization" dataType="Text" alias="Аттестуемая организация"/>
+			<field id="common_study_type" dataType="Text" alias="Вид обучения"/>
+			<field id="common_series" dataType="Text" alias="Серия документа"/>
+			<field id="common_study_prog_name" dataType="Text" alias="Наименование программы проф.обучения"/>
+			<field id="common_profession" dataType="Text" alias="Наименование профессии (для заполнения ФИСФРДО)"/>
+			<field id="common_study_period" dataType="Text" alias="Срок обучения"/>
+			<field id="common_qualification_name" dataType="Text" alias="Наименование квалификации"/>
+			<field id="common_study_form" dataType="Text" alias="Форма обучения"/>
+			<globalFilter id="user_id" fieldId="user_id"/>			
+		</model>		
+		<model id="StudyDocumentInsert" parent="ModelSQL" dataTable="study_document_inserts" virtual="FALSE" alias="Паспорт обученности (добавление)">
+			<field id="id" dataType="Int" primaryKey="TRUE" required="FALSE" autoInc="TRUE"/>			
+			<field id="study_document_insert_head_id" dataType="Int" refTable="study_document_insert_heads" refField="id" required="true"/>
+			<field id="snils" dataType="String" length="11" alias="SNILS"/>
+			<field id="issue_date" dataType="Date" alias="Дата выдачи"/>
+			<field id="end_date" dataType="Date" alias="Дата окончания"/>
+			<field id="post" dataType="Text" alias="Аттестуемая должность"/>
+			<field id="work_place" dataType="Text" alias="Место работы"/>
+			<field id="organization" dataType="Text" alias="Аттестуемая организация"/>
+			<field id="study_type" dataType="Text" alias="Вид обучения"/>
+			<field id="series" dataType="Text" alias="Серия документа"/>
+			<field id="number" dataType="Text" alias="Номер документа"/>
+			<field id="study_prog_name" dataType="Text" alias="Наименование программы проф.обучения"/>
+			<field id="profession" dataType="Text" alias="Наименование профессии (для заполнения ФИСФРДО)"/>
+			<field id="reg_number" dataType="Text" alias="Регистрационный номер документа"/>
+			<field id="study_period" dataType="Text" alias="Срок обучения"/>
+			<field id="name_first" dataType="Text" alias="Имя физлица"/>
+			<field id="name_second" dataType="Text" alias="Фамилия физлица"/>
+			<field id="name_middle" dataType="Text" alias="Отчество физлица"/>
+			<field id="qualification_name" dataType="Text" alias="Наименование квалификации"/>
+			<field id="study_form" dataType="Text" alias="Форма обучения"/>						
+			<index id="study_document_inserts_head_idx">
+				<field id="study_document_insert_head_id"/>
+			</index>
+		</model>		
+		<model id="StudyDocumentInsertList" parent="ModelSQL" dataTable="study_document_inserts_list" virtual="TRUE" alias="Паспорт обученности">
+			<field id="id" dataType="Int" primaryKey="TRUE"/>
+			<field id="study_document_insert_head_id" dataType="Int"/>
+			<field id="user_id" dataType="Int"/>
+			<field id="snils" dataType="String" length="11" alias="SNILS"/>
+			<field id="issue_date" dataType="Date"/>
+			<field id="end_date" dataType="Date" alias="Дата окончания"/>
+			<field id="post" dataType="Text" alias="Аттестуемая должность"/>
+			<field id="work_place" dataType="Text" alias="Место работы"/>
+			<field id="organization" dataType="Text" alias="Аттестуемая организация"/>
+			<field id="study_type" dataType="Text" alias="Вид обучения"/>
+			<field id="series" dataType="String" length="50" alias="Серия документа"/>
+			<field id="number" dataType="String" length="50" alias="Номер документа"/>
+			<field id="study_prog_name" dataType="Text" alias="Наименование программы проф.обучения"/>
+			<field id="profession" dataType="Text" alias="Наименование профессии (для заполнения ФИСФРДО)"/>
+			<field id="reg_number" dataType="Text" alias="Регистрационный номер документа"/>
+			<field id="study_period" dataType="Text" alias="Срок обучения"/>
+			<field id="name_first" dataType="Text" alias="Имя физлица"/>
+			<field id="name_second" dataType="Text" alias="Фамилия физлица"/>
+			<field id="name_middle" dataType="Text" alias="Отчество физлица"/>
+			<field id="qualification_name" dataType="Text" alias="Наименование квалификации"/>
+			<field id="study_form" dataType="Text" alias="Форма обучения"/>
+			<field id="name_full" dataType="Text" alias="ФИО"/>						
+			<globalFilter id="user_id" fieldId="user_id"/>
+		</model>
+		<model id="StudyDocumentInsertSelectList" parent="ModelSQL" dataTable="study_document_insert_selects_list" virtual="TRUE" alias="Паспорт обученности">
+			<defaultOrder>
+				<field id="name_full"/>
+			</defaultOrder>		
+			<field id="id" dataType="Int" primaryKey="TRUE"/>
+			<field id="study_document_insert_head_id" dataType="Int"/>
+			<field id="user_id" dataType="Int"/>
+			<field id="name_full" dataType="String"/>
+			<field id="ref" dataType="JSON"/>
+			<globalFilter id="user_id" fieldId="user_id"/>
+		</model>
+		
+		<model id="StudyDocumentInsertAttachmentList" parent="ModelSQL" dataTable="study_document_insert_attachments_list" virtual="TRUE" alias="Паспорт обученности">
+			<defaultOrder>
+				<field id="name_full"/>
+			</defaultOrder>		
+			<field id="id" dataType="Int" primaryKey="TRUE"/>
+			<field id="user_id" dataType="Int"/>
+			<field id="study_document_insert_head_id" dataType="Int"/>
+			<field id="name_full" dataType="Text" alias="Имя физлица"/>
+			<field id="attachment" dataType="JSON"/>
+			<globalFilter id="user_id" fieldId="user_id"/>
+		</model>
+		<model id="StudyType" parent="ModelSQL" dataTable="study_types" virtual="FALSE" alias="Виды обучения, классификатор">
+			<field id="id" dataType="Int" primaryKey="TRUE" required="FALSE" autoInc="TRUE"/>			
+			<field id="name" dataType="Text" alias="Наименование"/>
+			<index id="study_types_name_idx" type="gin" unique="TRUE">
+				<expression>lower(name) gin_trgm_ops</expression>
+			</index>
+		</model>		
+		<model id="Profession" parent="ModelSQL" dataTable="professions" virtual="FALSE" alias="Профессии, классификатор">
+			<field id="id" dataType="Int" primaryKey="TRUE" required="FALSE" autoInc="TRUE"/>			
+			<field id="name" dataType="Text" alias="Наименование"/>
+			<index id="professions_name_idx" type="gin" unique="TRUE">
+				<expression>lower(name) gin_trgm_ops</expression>
+			</index>
+		</model>		
+		<model id="Qualification" parent="ModelSQL" dataTable="qualifications" virtual="FALSE" alias="Квалификации, классификатор">
+			<field id="id" dataType="Int" primaryKey="TRUE" required="FALSE" autoInc="TRUE"/>			
+			<field id="name" dataType="Text" alias="Наименование"/>
+			<index id="qualifications_name_idx" type="gin">
+				<expression>lower(name) gin_trgm_ops</expression>
+			</index>
+		</model>		
+		<model id="StudyForm" parent="ModelSQL" dataTable="study_forms" virtual="FALSE" alias="Формы обучения">
+			<field id="id" dataType="Int" primaryKey="TRUE" required="FALSE" autoInc="TRUE"/>			
+			<field id="name" dataType="Text" alias="Наименование"/>
+			<index id="study_forms_name_idx" unique="TRUE">
+				<expression>lower(name)</expression>
+			</index>
+		</model>		
+		
+	</models>
+	
+	<constants>
+		<constant id="doc_per_page_count" name="Количество документов на странице" descr="Количество документов на странице в журнале документов" dataType="Int" defaultValue="60" autoload="TRUE"/>
+		<constant id="grid_refresh_interval" name="Период обновления таблиц" descr="Период обновления таблиц в секундах" dataType="Int" defaultValue="15" autoload="TRUE"/>
+		<constant id="session_live_time" name="Время жизни сессии" descr="Время, в течении которого сессия не будет удаляться на сервере" dataType="Interval" defaultValue="48:00" viewOptions="{&quot;dateFormat&quot;:&quot;H:i&quot;}" ctrlOptions="{&quot;editMask&quot;:&quot;99:99&quot;}"/>
+		<constant id="allowed_attachment_extesions" name="Разрешенные расширения файлдов для загрузки во вложения" descr="Список расширений через запятую, разрешенных для загрузки во вложения документов" dataType="Text" defaultValue="pdf" autoload="FALSE"/>
+		<constant id="study_document_fields" name="Поля документа обученности" descr="Порядок следования полей документа обученности для загрузки из Excel" dataType="JSON" autoload="FALSE"/>
+		<constant id="study_document_register_fields" name="Поля документа протокола" descr="Порядок следования полей документа протокола для загрузки из Excel" dataType="JSON" autoload="FALSE"/>
+		<constant id="mail_server" name="Сервер электронной почты" descr="Параметры сервера электронной почты" dataType="JSON" ctrClass="Constant_mail_server_Edit"/>
+		<constant id="api_server" name="Сервер API" descr="Параметры сервера API" dataType="JSON" ctrClass="Constant_api_server_Edit"/>
+		<constant id="client_offer" name="Клиентская оферта" descr="Клиентская оферта" dataType="JSON" ctrClass="Constant_client_offer_Edit"/>
+		<constant id="server_1c" name="Интеграция с 1с" descr="Данные по интеграции с 1с" dataType="JSON" ctrClass="Constant_server_1c_Edit"/>
+		<constant id="qr_code" name="Генерация QR кодов" descr="Настройка генерации QR кодов" dataType="JSON" ctrClass="Constant_qr_code_Edit"/>
+	</constants>
+	
+	<controllers>	
+		<controller id="Event" parentId="ControllerSQL">
+			<publicMethod id="subscribe">
+				<field id="events" dataType="Array" required="TRUE"/>
+			</publicMethod>
+			<publicMethod id="unsubscribe">
+				<field id="events" dataType="Array" required="TRUE"/>
+			</publicMethod>
+			<publicMethod id="publish">
+				<field id="events" dataType="Array" required="TRUE"/>
+			</publicMethod>
+		</controller>
+		<controller id="Constant" parentId="ControllerSQL">
+			<publicMethod id="set_value">
+				<field id="id" dataType="String" required="TRUE"/>
+				<field id="val" dataType="String"/>
+			</publicMethod>
+			<publicMethod id="get_list" modelId="ConstantList"/>
+			<publicMethod id="get_object" modelId="ConstantList"/>
+			<publicMethod id="get_values">
+				<field id="id_list" dataType="String"/>
+				<field id="field_sep" dataType="String" length="1"/>
+			</publicMethod>
+		</controller>
+		<controller id="Enum" parentId="ControllerSQL">
+			<publicMethod id="get_enum_list">
+				<field id="id" dataType="String"/>
+			</publicMethod>
+		</controller>							
+		<controller id="MainMenuConstructor" parentId="ControllerSQL">
+			<publicMethod id="insert" modelId="MainMenuConstructor"/>
+			<publicMethod id="update" modelId="MainMenuConstructor"/>
+			<publicMethod id="delete" modelId="MainMenuConstructor"/>
+			<publicMethod id="get_list" modelId="MainMenuConstructorList"/>
+			<publicMethod id="get_object" modelId="MainMenuConstructorDialog"/>
+		</controller>
+		<controller id="MainMenuContent" parentIdJS="ControllerObjClient" server="FALSE">
+			<publicMethod id="insert" modelId="MainMenuContent"/>
+			<publicMethod id="update" modelId="MainMenuContent"/>
+			<publicMethod id="delete" modelId="MainMenuContent"/>
+			<publicMethod id="get_list" modelId="MainMenuContent"/>
+			<publicMethod id="get_object" modelId="MainMenuContent"/>
+		</controller>
+		
+		<controller id="View" parentId="ControllerSQL">
+			<publicMethod id="get_list" modelId="ViewList"/>
+			<publicMethod id="complete" modelId="ViewList" patternFieldId="user_descr"/>
+			<publicMethod id="get_section_list" modelId="ViewSectionList"/>
+		</controller>				
+		<controller id="VariantStorage" parentId="ControllerSQL">
+			<publicMethod id="insert" modelId="VariantStorage"/>
+			<publicMethod id="upsert_filter_data" modelId="VariantStorage">
+				<field id="storage_name" dataType="String" required="TRUE"/>
+				<field id="variant_name" dataType="String" required="TRUE"/>
+				<field id="filter_data" dataType="String" required="TRUE"/>
+				<field id="default_variant" dataType="Bool" required="TRUE"/>
+			</publicMethod>			
+			<publicMethod id="upsert_col_visib_data" modelId="VariantStorage">
+				<field id="storage_name" dataType="String" required="TRUE"/>
+				<field id="variant_name" dataType="String" required="TRUE"/>
+				<field id="col_visib" dataType="String" required="TRUE"/>
+				<field id="default_variant" dataType="Bool" required="TRUE"/>
+			</publicMethod>			
+			<publicMethod id="upsert_col_order_data" modelId="VariantStorage">
+				<field id="storage_name" dataType="String" required="TRUE"/>
+				<field id="variant_name" dataType="String" required="TRUE"/>
+				<field id="col_order" dataType="String" required="TRUE"/>
+				<field id="default_variant" dataType="Bool" required="TRUE"/>
+			</publicMethod>						
+			<publicMethod id="update" modelId="VariantStorage"/>
+			<publicMethod id="delete" modelId="VariantStorage"/>
+			<publicMethod id="get_list">
+				<field id="storage_name" dataType="String" required="TRUE"/>
+				<field id="variant_name" dataType="String"/>
+			</publicMethod>
+			<publicMethod id="get_object" modelId="VariantStorage"/>
+			<publicMethod id="get_filter_data" modelId="VariantStorage">
+				<field id="storage_name" dataType="String" required="TRUE"/>
+				<field id="variant_name" dataType="String"/>
+			</publicMethod>
+			<publicMethod id="get_col_visib_data" modelId="VariantStorage">
+				<field id="storage_name" dataType="String" required="TRUE"/>
+				<field id="variant_name" dataType="String"/>
+			</publicMethod>			
+			<publicMethod id="get_col_order_data" modelId="VariantStorage">
+				<field id="storage_name" dataType="String" required="TRUE"/>
+				<field id="variant_name" dataType="String"/>
+			</publicMethod>			
+		</controller>		
+
+		<controller id="About" parentId="ControllerSQL">
+			<publicMethod id="get_object" modelId="About"/>
+		</controller>		
+	
+		<controller id="User" parentId="ControllerSQL" noState="FALSE">
+			<publicMethod id="insert" modelId="User" encType="multipart" requestType="post"/>
+			<publicMethod id="update" modelId="User" encType="multipart" requestType="post"/>
+			<publicMethod id="delete" modelId="User"/>
+			<publicMethod id="get_list" modelId="UserList"/>
+			<publicMethod id="get_object" modelId="UserDialog"/>
+			<publicMethod id="complete" modelId="UserSelect" patternFieldId="descr"/>
+			<publicMethod id="get_profile" modelId="UserDialog"/>
+			<publicMethod id="reset_pwd">
+				<field id="user_id" dataType="Int" required="TRUE"/>
+			</publicMethod>
+			<publicMethod id="login">
+				<field id="name" dataType="String" alias="Имя пользователя" length="50" required="TRUE"/>
+				<field id="pwd" dataType="Password" alias="Пароль" length="20" required="TRUE"/>
+				<field id="width_type" dataType="String" length="2"/>
+			</publicMethod>
+			<publicMethod id="login_refresh">
+				<field id="refresh_token" dataType="String" required="true" length="50"/>
+			</publicMethod>						
+			<publicMethod id="logout"/>
+			<publicMethod id="logout_html"/>			
+			<publicMethod id="download_photo">
+				<field id="user_id" dataType="Int" required="TRUE"/>
+			</publicMethod>
+			<publicMethod id="delete_photo">
+				<field id="user_id" dataType="Int" required="TRUE"/>
+			</publicMethod>
+			<publicMethod id="password_recover">
+				<field id="email" dataType="String" required="TRUE" length="100"/>
+				<field id="captcha_key" dataType="String" required="TRUE" length="10"/>
+			</publicMethod>
+			<publicMethod id="register">
+				<field id="name" dataType="String" length="250" required="TRUE"/>
+				<field id="name_full" dataType="Text" length="250"/>
+				<field id="snils" dataType="String" length="50" required="TRUE"/>
+				<field id="post" dataType="String" length="250"/>
+				<field id="sex" dataType="String" length="50"/>
+				<field id="inn" dataType="String" required="TRUE" length="12"/>
+				<field id="captcha_key" dataType="String" required="TRUE" length="10"/>
+			</publicMethod>	
+			<publicMethod id="set_viewed">
+				<field id="user_id" dataType="Int" required="TRUE"/>
+			</publicMethod>					
+			<publicMethod id="gen_qrcode">
+				<field id="user_id" dataType="Int" required="TRUE"/>
+			</publicMethod>					
+			<publicMethod id="send_qrcode_email">
+				<field id="user_id" dataType="Int" required="TRUE"/>
+			</publicMethod>								
+		</controller>	
+		<controller id="Login" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="get_list" modelId="LoginList"/>
+			<publicMethod id="get_object" modelId="LoginList"/>
+		</controller>
+		<controller id="LoginDevice" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="get_list" modelId="LoginDeviceList"/>
+			<publicMethod id="switch_banned">
+				<field id="banned" dataType="Bool" required="TRUE"/>
+				<field id="hash" dataType="String" length="32" required="TRUE"/>
+				<field id="user_id" dataType="Int" required="TRUE"/>
+			</publicMethod>
+		</controller>
+		
+		<controller id="LoginDeviceBan" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="LoginDeviceBan"/>
+			<publicMethod id="delete" modelId="LoginDeviceBan"/>
+			<publicMethod id="get_list" modelId="LoginDeviceBan"/>
+			<publicMethod id="get_object" modelId="LoginDeviceBan"/>
+		</controller>
+		<controller id="UserMacAddress" parentId="ControllerSQL" state="TRUE" noState="FALSE">
+			<publicMethod id="insert" modelId="UserMacAddress"/>
+			<publicMethod id="update" modelId="UserMacAddress"/>
+			<publicMethod id="delete" modelId="UserMacAddress"/>
+			<publicMethod id="get_list" modelId="UserMacAddressList"/>
+			<publicMethod id="get_object" modelId="UserMacAddressList"/>
+		</controller>
+		
+		<controller id="TimeZoneLocale" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="TimeZoneLocale"/>
+			<publicMethod id="update" modelId="TimeZoneLocale"/>
+			<publicMethod id="delete" modelId="TimeZoneLocale"/>
+			<publicMethod id="get_list" modelId="TimeZoneLocale"/>
+			<publicMethod id="get_object" modelId="TimeZoneLocale"/>
+		</controller>
+		<controller id="Client" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="Client"/>
+			<publicMethod id="update" modelId="Client"/>
+			<publicMethod id="delete" modelId="Client"/>
+			<publicMethod id="get_list" modelId="ClientList"/>
+			<publicMethod id="get_object" modelId="ClientDialog"/>
+			<publicMethod id="complete" modelId="ClientList" patternFieldId="name"/>
+			<publicMethod id="check_for_register">
+				<field id="inn" dataType="String" required="TRUE" length="12"/>
+				<field id="captcha_key" dataType="String" required="TRUE" length="10"/>
+			</publicMethod>			
+			<publicMethod id="update_attrs">
+				<field id="name" dataType="String" length="1000"/>
+				<field id="name_full" dataType="String" length="1000"/>
+				<field id="legal_address" dataType="String" length="1000"/>
+				<field id="post_address" dataType="String" length="1000"/>
+				<field id="kpp" dataType="String" length="10" alias="КПП"/>
+				<field id="ogrn" dataType="String" length="15"/>
+				<field id="okpo" dataType="String" length="20"/>
+				<field id="okved" dataType="String" length="500"/>				
+			</publicMethod>			
+			<publicMethod id="select_company">
+				<field id="parent_id" dataType="Int" required="TRUE"/>
+			</publicMethod>			
+			<publicMethod id="set_viewed">
+				<field id="client_id" dataType="Int" required="TRUE"/>
+			</publicMethod>					
+		</controller>
+		<controller id="ClientAccess" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="ClientAccess"/>
+			<publicMethod id="update" modelId="ClientAccess"/>
+			<publicMethod id="delete" modelId="ClientAccess"/>
+			<publicMethod id="get_list" modelId="ClientAccessList"/>
+			<publicMethod id="get_object" modelId="ClientAccessList"/>
+			<publicMethod id="make_order">
+				<field id="client_access_id" dataType="Int" required="TRUE"/>
+				<field id="q_id" dataType="String" length="36" required="TRUE"/>
+			</publicMethod>					
+			<publicMethod id="get_order_print">
+				<field id="client_access_id" dataType="Int" required="TRUE"/>
+				<field id="q_id" dataType="String" length="36" required="TRUE"/>
+			</publicMethod>								
+		</controller>
+		<controller id="ObjectModLog" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="get_list" modelId="ObjectModLog"/>
+			<publicMethod id="get_object" modelId="ObjectModLog"/>
+		</controller>
+		<controller id="StudyDocumentRegister" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="StudyDocumentRegister"/>
+			<publicMethod id="update" modelId="StudyDocumentRegister"/>
+			<publicMethod id="delete" modelId="StudyDocumentRegister"/>
+			<publicMethod id="get_list" modelId="StudyDocumentRegisterList"/>
+			<publicMethod id="get_object" modelId="StudyDocumentRegisterDialog"/>
+			<publicMethod id="batch_update" requestType="post">
+				<field id="objects" dataType="JSON"/>
+			</publicMethod>	
+			<publicMethod id="batch_delete" requestType="post">
+				<field id="keys" dataType="JSON"/>
+			</publicMethod>			
+			<publicMethod id="complete" modelId="StudyDocumentRegisterList" patternFieldId="name"/>
+			<publicMethod id="analyze_excel" encType="multipart" requestType="post">
+				<field id="analyze_count" dataType="Int" required="TRUE"/>
+				<field id="content_data" dataType="Text"/>
+			</publicMethod>			
+			<publicMethod id="get_analyze_count">
+			</publicMethod>			
+			<publicMethod id="upload_excel" encType="multipart" requestType="post">
+				<field id="analyze_count" dataType="Int" required="TRUE"/>
+				<field id="field_order" dataType="String" length="1000" required="TRUE"/>
+				<field id="content_data" dataType="Text"/>
+				<field id="company_id" dataType="Int" required="TRUE"/>
+			</publicMethod>	
+			<publicMethod id="get_excel_template"/>		
+			<publicMethod id="save_field_order" requestType="post">
+				<field id="analyze_count" dataType="Int" required="TRUE"/>
+				<field id="field_order" dataType="String" length="3000" required="TRUE"/>
+			</publicMethod>			
+			<publicMethod id="get_excel_error" requestType="post">
+				<field id="operation_id" dataType="String" length="32" required="TRUE"/>						
+			</publicMethod>			
+			
+		</controller>
+		<controller id="StudyDocument" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="StudyDocument"/>
+			<publicMethod id="update" modelId="StudyDocument"/>
+			<publicMethod id="batch_update" requestType="post">
+				<field id="objects" dataType="JSON"/>
+			</publicMethod>
+			<publicMethod id="batch_delete" requestType="post">
+				<field id="keys" dataType="JSON"/>
+			</publicMethod>			
+			<publicMethod id="delete" modelId="StudyDocument"/>
+			<publicMethod id="get_list" modelId="StudyDocumentList"/>
+			<publicMethod id="get_with_pict_list" modelId="StudyDocumentWithPictList">
+				<field id="cond_fields" dataType="String"/>
+				<field id="cond_vals" dataType="String"/>
+				<field id="cond_sgns" dataType="String"/>
+				<field id="cond_ic" dataType="String"/>
+				<field id="from" dataType="Int"/>
+				<field id="count" dataType="Int"/>
+				<field id="ord_fields" dataType="String"/>
+				<field id="ord_directs" dataType="String"/>
+				<field id="field_sep" dataType="String"/>
+			</publicMethod>
+			<publicMethod id="get_object" modelId="StudyDocumentDialog"/>
+			<publicMethod id="complete" modelId="StudyDocumentList" patternFieldId="number"/>
+			<publicMethod id="get_preview">
+				<field id="study_document_id" dataType="Int" required="TRUE"/>
+			</publicMethod>
+			<publicMethod id="analyze_excel" encType="multipart" requestType="post">
+				<field id="analyze_count" dataType="Int" required="TRUE"/>
+				<field id="content_data" dataType="Text"/>
+			</publicMethod>			
+			<publicMethod id="get_analyze_count">
+			</publicMethod>			
+			<publicMethod id="upload_excel" encType="multipart" requestType="post">
+				<field id="analyze_count" dataType="Int" required="TRUE"/>
+				<field id="field_order" dataType="String" length="1000" required="TRUE"/>
+				<field id="content_data" dataType="Text"/>
+				<field id="company_id" dataType="Int" required="TRUE"/>
+			</publicMethod>			
+			<publicMethod id="get_excel_template"/>
+			<publicMethod id="save_field_order" requestType="post">
+				<field id="analyze_count" dataType="Int" required="TRUE"/>
+				<field id="field_order" dataType="String" length="3000" required="TRUE"/>
+			</publicMethod>			
+			<publicMethod id="get_excel_error" requestType="post">
+				<field id="operation_id" dataType="String" length="32" required="TRUE"/>						
+			</publicMethod>			
+			
+		</controller>
+		<controller id="StudyDocumentAttachment" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="get_list" modelId="StudyDocumentAttachmentList"/>
+			<publicMethod id="get_object" modelId="StudyDocumentAttachmentList"/>
+			<publicMethod id="delete_file">
+				<field id="study_documents_ref" dataType="String" required="TRUE"/>
+				<field id="content_id" dataType="String" required="TRUE"/>
+			</publicMethod>
+			<publicMethod id="get_file">
+				<field id="study_documents_ref" dataType="String" required="TRUE"/>
+				<field id="content_id" dataType="String" length="36" required="TRUE"/>
+				<field id="inline" dataType="Int"/>
+			</publicMethod>
+			<publicMethod id="add_file" encType="multipart" requestType="post">
+				<field id="study_documents_ref" dataType="String" required="TRUE"/>
+				<field id="content_data" dataType="Text"/>
+				<field id="content_info" dataType="String" length="500" required="TRUE"/>
+			</publicMethod>			
+		</controller>
+		<controller id="ClientSearch" parentId="ControllerSQL">
+			<publicMethod id="search">
+				<field id="query" dataType="String" length="250" required="TRUE"/>
+			</publicMethod>
+		</controller>
+		<controller id="Constant_study_document_fields" parentIdJS="ControllerObjClient" server="FALSE">
+			<publicMethod id="insert" modelId="Constant_study_document_fields"/>
+			<publicMethod id="update" modelId="Constant_study_document_fields"/>
+			<publicMethod id="delete" modelId="Constant_study_document_fields"/>
+			<publicMethod id="get_list" modelId="Constant_study_document_fields"/>
+			<publicMethod id="get_object" modelId="Constant_study_document_fields"/>
+		</controller>
+		<controller id="Constant_study_document_register_fields" parentIdJS="ControllerObjClient" server="FALSE">
+			<publicMethod id="insert" modelId="Constant_study_document_register_fields"/>
+			<publicMethod id="update" modelId="Constant_study_document_register_fields"/>
+			<publicMethod id="delete" modelId="Constant_study_document_register_fields"/>
+			<publicMethod id="get_list" modelId="Constant_study_document_register_fields"/>
+			<publicMethod id="get_object" modelId="Constant_study_document_register_fields"/>
+		</controller>
+		
+		<controller id="UserOperation" parentId="ControllerSQL">
+			<publicMethod id="get_object" modelId="UserOperationDialog"/>
+			<publicMethod id="delete" modelId="UserOperation"/>
+		</controller>
+		<controller id="PersonData" parentId="ControllerSQL">
+			<publicMethod id="login">
+				<field id="url" dataType="String" length="32" required="TRUE"/>
+				<field id="width_type" dataType="String" length="2"/>
+			</publicMethod>
+		</controller>
+		<controller id="MailMessage" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="MailMessage"/>
+			<publicMethod id="update" modelId="MailMessage"/>
+			<publicMethod id="delete" modelId="MailMessage"/>
+			<publicMethod id="get_list" modelId="MailMessageList"/>
+			<publicMethod id="get_object" modelId="MailMessageList"/>
+		</controller>
+		<controller id="MailMessageAttachment" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="MailMessageAttachment"/>
+			<publicMethod id="update" modelId="MailMessageAttachment"/>
+			<publicMethod id="delete" modelId="MailMessageAttachment"/>
+			<publicMethod id="get_list" modelId="MailMessageAttachment"/>
+			<publicMethod id="get_object" modelId="MailMessageAttachment"/>
+		</controller>
+		<controller id="MailTemplate" parentId="ControllerSQL">
+			<publicMethod id="insert" modelId="MailTemplate"/>
+			<publicMethod id="update" modelId="MailTemplate"/>
+			<publicMethod id="get_list" modelId="MailTemplateList"/>
+			<publicMethod id="get_object" modelId="MailTemplate"/>
+		</controller>
+		<controller id="ReportTemplateField" parentIdJS="ControllerObjClient" server="FALSE">
+			<publicMethod id="insert" modelId="ReportTemplateField"/>
+			<publicMethod id="update" modelId="ReportTemplateField"/>
+			<publicMethod id="delete" modelId="ReportTemplateField"/>
+			<publicMethod id="get_list" modelId="ReportTemplateField"/>
+			<publicMethod id="get_object" modelId="ReportTemplateField"/>
+		</controller>
+		<controller id="Captcha" parentId="Controller">
+			<publicMethod id="get">
+				<field id="id" dataType="String" length="50"/>
+			</publicMethod>
+		</controller>
+		<controller id="StudyDocumentInsertHead" parentId="ControllerSQL" server="TRUE">
+			<publicMethod id="insert" modelId="StudyDocumentInsertHead"/>
+			<publicMethod id="update" modelId="StudyDocumentInsertHead"/>
+			<publicMethod id="delete" modelId="StudyDocumentInsertHead"/>
+			<publicMethod id="get_object" modelId="StudyDocumentInsertHeadList"/>
+			<publicMethod id="get_list" modelId="StudyDocumentInsertHeadList"/>
+			<publicMethod id="close">
+				<field id="study_document_insert_head_id" dataType="Int" required="TRUE"/>
+			</publicMethod>	
+		</controller>		
+		<controller id="StudyDocumentInsert" parentId="ControllerSQL" server="TRUE">
+			<publicMethod id="insert" modelId="StudyDocumentInsert"/>
+			<publicMethod id="update" modelId="StudyDocumentInsert"/>
+			<publicMethod id="delete" modelId="StudyDocumentInsert"/>
+			<publicMethod id="get_list" modelId="StudyDocumentInsertList"/>
+			<publicMethod id="get_object" modelId="StudyDocumentInsertList"/>
+			<publicMethod id="complete" modelId="StudyDocumentInsertSelectList" patternFieldId="name_full"/>
+			<publicMethod id="batch_update" requestType="post">
+				<field id="objects" dataType="JSON"/>
+			</publicMethod>
+			<publicMethod id="batch_delete" requestType="post">
+				<field id="keys" dataType="JSON"/>
+			</publicMethod>	
+			<publicMethod id="add_files" encType="multipart" requestType="post">
+				<field id="study_document_insert_head_id" dataType="Int" required="TRUE"/>
+				<field id="content_info" dataType="Text" required="TRUE"/>
+				<field id="content_data" dataType="Text"/>
+			</publicMethod>											
+		</controller>
+		<controller id="StudyDocumentInsertAttachment" parentId="ControllerSQL" server="TRUE">
+			<publicMethod id="get_list" modelId="StudyDocumentInsertAttachmentList"/>
+			<publicMethod id="add_files" encType="multipart" requestType="post">
+				<field id="study_document_insert_head_id" dataType="Int" required="TRUE"/>
+				<field id="content_info" dataType="Text" required="TRUE"/>
+				<field id="content_data" dataType="Text"/>
+			</publicMethod>						
+		</controller>
+		<controller id="StudyType" parentId="ControllerSQL" server="TRUE">
+			<publicMethod id="insert" modelId="StudyType"/>
+			<publicMethod id="update" modelId="StudyType"/>
+			<publicMethod id="delete" modelId="StudyType"/>
+			<publicMethod id="get_list" modelId="StudyType"/>
+			<publicMethod id="get_object" modelId="StudyType"/>
+			<publicMethod id="complete" modelId="StudyType" patternFieldId="name"/>
+		</controller>
+		<controller id="Profession" parentId="ControllerSQL" server="TRUE">
+			<publicMethod id="insert" modelId="Profession"/>
+			<publicMethod id="update" modelId="Profession"/>
+			<publicMethod id="delete" modelId="Profession"/>
+			<publicMethod id="get_list" modelId="Profession"/>
+			<publicMethod id="get_object" modelId="Profession"/>
+			<publicMethod id="complete" modelId="Profession" patternFieldId="name"/>
+		</controller>
+		<controller id="Qualification" parentId="ControllerSQL" server="TRUE">
+			<publicMethod id="insert" modelId="Qualification"/>
+			<publicMethod id="update" modelId="Qualification"/>
+			<publicMethod id="delete" modelId="Qualification"/>
+			<publicMethod id="get_list" modelId="Qualification"/>
+			<publicMethod id="get_object" modelId="Qualification"/>
+			<publicMethod id="complete" modelId="Qualification" patternFieldId="name"/>
+		</controller>		
+		<controller id="StudyForm" parentId="ControllerSQL" server="TRUE">
+			<publicMethod id="insert" modelId="StudyForm"/>
+			<publicMethod id="update" modelId="StudyForm"/>
+			<publicMethod id="delete" modelId="StudyForm"/>
+			<publicMethod id="get_list" modelId="StudyForm"/>
+			<publicMethod id="get_object" modelId="StudyForm"/>
+			<publicMethod id="complete" modelId="StudyForm" patternFieldId="name"/>
+		</controller>		
+		
+	</controllers>
+	
+	<permissions>
+		<permission type="allow" controllerId="all" methodId="all" roleId="admin"/>
+		<permission type="allow" controllerId="User" methodId="login" roleId="guest"/>
+		<permission type="allow" controllerId="User" methodId="register" roleId="guest"/>
+		<permission type="allow" controllerId="User" methodId="password_recover" roleId="guest"/>
+		<permission type="allow" controllerId="Captcha" methodId="get" roleId="guest"/>
+		<permission type="allow" controllerId="Client" methodId="check_for_register" roleId="guest"/>
+		<permission type="allow" controllerId="PersonData" methodId="login" roleId="guest"/>
+		
+		<!-- ADMIN 1 -->
+		<permission type="allow" controllerId="Event" methodId="all" roleId="client_admin1"/>
+		<permission type="allow" controllerId="Constant" methodId="get_values" roleId="client_admin1"/>
+		<permission type="allow" controllerId="Enum" methodId="get_list" roleId="client_admin1"/>
+		<permission type="allow" controllerId="VariantStorage" methodId="all" roleId="client_admin1"/>		
+		<permission type="allow" controllerId="About" methodId="all" roleId="client_admin1"/>
+		<permission type="allow" controllerId="User" methodId="login" roleId="client_admin1"/>
+		<permission type="allow" controllerId="User" methodId="insert" roleId="client_admin1"/>
+		<permission type="allow" controllerId="User" methodId="update" roleId="client_admin1"/>
+		<permission type="allow" controllerId="User" methodId="delete" roleId="client_admin1"/>
+		<permission type="allow" controllerId="User" methodId="get_list" roleId="client_admin1"/>
+		<permission type="allow" controllerId="User" methodId="get_object" roleId="client_admin1"/>
+		<permission type="allow" controllerId="User" methodId="complete" roleId="client_admin1"/>
+		<permission type="allow" controllerId="User" methodId="get_profile" roleId="client_admin1"/>
+		<permission type="allow" controllerId="User" methodId="reset_pwd" roleId="client_admin1"/>
+		<permission type="allow" controllerId="User" methodId="login_refresh" roleId="client_admin1"/>
+		<permission type="allow" controllerId="User" methodId="logout" roleId="client_admin1"/>
+		<permission type="allow" controllerId="User" methodId="logout_html" roleId="client_admin1"/>
+		<permission type="allow" controllerId="User" methodId="download_photo" roleId="client_admin1"/>
+		<permission type="allow" controllerId="User" methodId="delete_photo" roleId="client_admin1"/>
+		<permission type="allow" controllerId="User" methodId="gen_qrcode" roleId="client_admin1"/>
+		<permission type="allow" controllerId="User" methodId="send_qrcode_email" roleId="client_admin1"/>
+		<permission type="allow" controllerId="Login" methodId="get_list" roleId="client_admin1"/>
+		<permission type="allow" controllerId="LoginDevice" methodId="get_list" roleId="client_admin1"/>
+		<permission type="allow" controllerId="LoginDevice" methodId="switch_banned" roleId="client_admin1"/>
+		<permission type="allow" controllerId="LoginDeviceBan" methodId="all" roleId="client_admin1"/>
+		<permission type="allow" controllerId="TimeZoneLocale" methodId="all" roleId="client_admin1"/>
+		<permission type="allow" controllerId="Client" methodId="insert" roleId="client_admin1"/>
+		<permission type="allow" controllerId="Client" methodId="update" roleId="client_admin1"/>
+		<permission type="allow" controllerId="Client" methodId="delete" roleId="client_admin1"/>
+		<permission type="allow" controllerId="Client" methodId="get_list" roleId="client_admin1"/>
+		<permission type="allow" controllerId="Client" methodId="get_object" roleId="client_admin1"/>
+		<permission type="allow" controllerId="Client" methodId="complete" roleId="client_admin1"/>
+		<permission type="allow" controllerId="Client" methodId="set_viewed" roleId="client_admin1"/>
+		<permission type="allow" controllerId="ClientSearch" methodId="search" roleId="client_admin1"/>
+		<permission type="allow" controllerId="UserOperation" methodId="get_object" roleId="client_admin1"/>
+		<permission type="allow" controllerId="UserOperation" methodId="delete" roleId="client_admin1"/>
+		<permission type="allow" controllerId="ClientAccess" methodId="get_list" roleId="client_admin1"/>
+		<permission type="allow" controllerId="ClientAccess" methodId="get_order_print" roleId="client_admin1"/>
+		<permission type="allow" controllerId="ClientAccess" methodId="make_order" roleId="client_admin1"/>
+		<permission type="allow" controllerId="ObjectModLog" methodId="all" roleId="client_admin1"/>
+		<permission type="allow" controllerId="StudyDocumentRegister" methodId="all" roleId="client_admin1"/>
+		<permission type="allow" controllerId="StudyDocument" methodId="all" roleId="client_admin1"/>
+		<permission type="allow" controllerId="StudyDocumentAttachment" methodId="all" roleId="client_admin1"/>
+		<permission type="allow" controllerId="StudyDocumentInsertHead" methodId="all" roleId="client_admin1"/>
+		<permission type="allow" controllerId="StudyDocumentInsert" methodId="all" roleId="client_admin1"/>
+		<permission type="allow" controllerId="StudyDocumentInsertAttachment" methodId="all" roleId="client_admin1"/>
+		<permission type="allow" controllerId="StudyType" methodId="get_list" roleId="client_admin1"/>
+		<permission type="allow" controllerId="StudyType" methodId="get_object" roleId="client_admin1"/>
+		<permission type="allow" controllerId="StudyType" methodId="complete" roleId="client_admin1"/>
+		<permission type="allow" controllerId="Profession" methodId="get_list" roleId="client_admin1"/>
+		<permission type="allow" controllerId="Profession" methodId="get_object" roleId="client_admin1"/>
+		<permission type="allow" controllerId="Profession" methodId="complete" roleId="client_admin1"/>
+		<permission type="allow" controllerId="Qualification" methodId="get_list" roleId="client_admin1"/>
+		<permission type="allow" controllerId="Qualification" methodId="get_object" roleId="client_admin1"/>
+		<permission type="allow" controllerId="Qualification" methodId="complete" roleId="client_admin1"/>
+		<permission type="allow" controllerId="StudyForm" methodId="get_list" roleId="client_admin1"/>
+		<permission type="allow" controllerId="StudyForm" methodId="get_object" roleId="client_admin1"/>
+		<permission type="allow" controllerId="StudyForm" methodId="complete" roleId="client_admin1"/>
+
+		<!-- ADMIN 2 -->
+		<permission type="allow" controllerId="Event" methodId="all" roleId="client_admin2"/>
+		<permission type="allow" controllerId="Constant" methodId="get_values" roleId="client_admin2"/>
+		<permission type="allow" controllerId="Enum" methodId="get_list" roleId="client_admin2"/>
+		<permission type="allow" controllerId="VariantStorage" methodId="all" roleId="client_admin2"/>
+		<permission type="allow" controllerId="About" methodId="all" roleId="client_admin2"/>
+		<permission type="allow" controllerId="User" methodId="update" roleId="client_admin2"/>
+		<permission type="allow" controllerId="User" methodId="login" roleId="client_admin2"/>
+		<permission type="allow" controllerId="User" methodId="get_list" roleId="client_admin2"/>
+		<permission type="allow" controllerId="User" methodId="get_object" roleId="client_admin2"/>
+		<permission type="allow" controllerId="User" methodId="get_profile" roleId="client_admin2"/>
+		<permission type="allow" controllerId="User" methodId="reset_pwd" roleId="client_admin2"/>
+		<permission type="allow" controllerId="User" methodId="login_refresh" roleId="client_admin2"/>
+		<permission type="allow" controllerId="User" methodId="logout" roleId="client_admin2"/>
+		<permission type="allow" controllerId="User" methodId="logout_html" roleId="client_admin2"/>
+		<permission type="allow" controllerId="User" methodId="download_photo" roleId="client_admin2"/>
+		<permission type="allow" controllerId="User" methodId="delete_photo" roleId="client_admin2"/>
+		<permission type="allow" controllerId="User" methodId="gen_qrcode" roleId="client_admin2"/>
+		<permission type="allow" controllerId="User" methodId="send_qrcode_email" roleId="client_admin2"/>
+		<permission type="allow" controllerId="TimeZoneLocale" methodId="all" roleId="client_admin2"/>
+		<permission type="allow" controllerId="Client" methodId="insert" roleId="client_admin2"/>
+		<permission type="allow" controllerId="Client" methodId="update" roleId="client_admin2"/>
+		<permission type="allow" controllerId="Client" methodId="delete" roleId="client_admin2"/>
+		<permission type="allow" controllerId="Client" methodId="get_list" roleId="client_admin2"/>
+		<permission type="allow" controllerId="Client" methodId="get_object" roleId="client_admin2"/>
+		<permission type="allow" controllerId="Client" methodId="complete" roleId="client_admin2"/>
+		<permission type="allow" controllerId="Client" methodId="set_viewed" roleId="client_admin2"/>
+		<permission type="allow" controllerId="ClientSearch" methodId="search" roleId="client_admin2"/>
+		<permission type="allow" controllerId="UserOperation" methodId="get_object" roleId="client_admin2"/>
+		<permission type="allow" controllerId="UserOperation" methodId="delete" roleId="client_admin2"/>
+		<permission type="allow" controllerId="ClientAccess" methodId="get_list" roleId="client_admin2"/>
+		<permission type="allow" controllerId="ObjectModLog" methodId="all" roleId="client_admin2"/>
+		<permission type="allow" controllerId="StudyDocumentRegister" methodId="all" roleId="client_admin2"/>
+		<permission type="allow" controllerId="StudyDocument" methodId="all" roleId="client_admin2"/>
+		<permission type="allow" controllerId="StudyDocumentAttachment" methodId="all" roleId="client_admin2"/>
+		<permission type="allow" controllerId="StudyDocumentInsertHead" methodId="all" roleId="client_admin2"/>
+		<permission type="allow" controllerId="StudyDocumentInsert" methodId="all" roleId="client_admin2"/>
+		<permission type="allow" controllerId="StudyDocumentInsertAttachment" methodId="all" roleId="client_admin2"/>
+		<permission type="allow" controllerId="StudyType" methodId="get_list" roleId="client_admin2"/>
+		<permission type="allow" controllerId="StudyType" methodId="get_object" roleId="client_admin2"/>
+		<permission type="allow" controllerId="StudyType" methodId="complete" roleId="client_admin2"/>
+		<permission type="allow" controllerId="Profession" methodId="get_list" roleId="client_admin2"/>
+		<permission type="allow" controllerId="Profession" methodId="get_object" roleId="client_admin2"/>
+		<permission type="allow" controllerId="Profession" methodId="complete" roleId="client_admin2"/>
+		<permission type="allow" controllerId="Qualification" methodId="get_list" roleId="client_admin2"/>
+		<permission type="allow" controllerId="Qualification" methodId="get_object" roleId="client_admin2"/>
+		<permission type="allow" controllerId="Qualification" methodId="complete" roleId="client_admin2"/>
+		<permission type="allow" controllerId="StudyForm" methodId="get_list" roleId="client_admin2"/>
+		<permission type="allow" controllerId="StudyForm" methodId="get_object" roleId="client_admin2"/>
+		<permission type="allow" controllerId="StudyForm" methodId="complete" roleId="client_admin2"/>
+		
+		<permission type="allow" controllerId="PersonData" methodId="login" roleId="person"/>
+		<permission type="allow" controllerId="User" methodId="get_profile" roleId="person"/>
+		<permission type="allow" controllerId="User" methodId="update" roleId="person"/>
+		<permission type="allow" controllerId="StudyDocument" methodId="get_list" roleId="person"/>
+		<permission type="allow" controllerId="StudyDocument" methodId="get_object" roleId="person"/>
+		<permission type="allow" controllerId="StudyDocumentAttachment" methodId="get_file" roleId="person"/>
+		<permission type="allow" controllerId="TimeZoneLocale" methodId="get_list" roleId="person"/>		
+	</permissions>
+	
+	<views>
+		<view id="10000" c="User_Controller" t="UserList" f="get_list" section="Справочники" descr="Пользователи"/>
+		<view id="10001" c="UserMacAddress_Controller" t="UserMacAddressList" f="get_list" section="Справочники" descr="MAC адреса пользователей"/>
+		<view id="10002" c="LoginDevice_Controller" t="LoginDeviceList" f="get_list" section="Справочники" descr="Устройства входа пользователей"/>
+		<view id="10003" c="Client_Controller" t="ClientList" f="get_list" section="Справочники" descr="Организации"/>
+		<view id="10004" c="ClientAccess_Controller" t="ClientAccessList" f="get_list" section="Справочники" descr="Доступы площадок"/>
+		<view id="10006" c="MailTemplate_Controller" t="MailTemplateList" f="get_list" section="Справочники" descr="Шаблоны электронных писем"/>
+		<view id="10007" c="StudyType_Controller" t="StudyTypeList" f="get_list" section="Справочники" descr="Виды обучения"/>
+		<view id="10008" c="Profession_Controller" t="ProfessionList" f="get_list" section="Справочники" descr="Профессии"/>
+		<view id="10009" c="Qualification_Controller" t="QualificationList" f="get_list" section="Справочники" descr="Квалификации"/>
+		<view id="10010" c="StudyForm_Controller" t="StudyFormList" f="get_list" section="Справочники" descr="Формы обучения"/>
+		
+		<view id="30000" c="Login_Controller" t="LoginList" f="get_list" section="Журналы" descr="Журнал сеансов работы"/>
+		<view id="30001" c="ObjectModLog_Controller" t="ObjectModLog" f="get_list" section="Журналы" descr="Журнал изменения объектов"/>		
+		<view id="30002" c="StudyDocumentRegister_Controller" t="StudyDocumentRegisterList" f="get_list" section="Журналы" descr="Журнал протоколов"/>
+		<view id="30003" c="StudyDocument_Controller" t="StudyDocumentList" f="get_list" section="Журналы" descr="Журнал сертификатов"/>		
+		<view id="30004" c="StudyDocumentAttachment_Controller" t="StudyDocumentAttachmentList" f="get_list" section="Журналы" descr="Журнал вложений документов"/>
+		<view id="30005" c="PersonData_Controller" t="PersonData" section="Журналы" descr="Журнал сертификатов для ЛК"/>
+		<view id="30006" c="MailMessage_Controller" t="MailMessageList" f="get_list" section="Журналы" descr="Исходящие электронные письма"/>
+		<view id="30007" c="StudyDocumentInsertHead_Controller" t="StudyDocumentInsertHeadList" f="get_list" section="Журналы" descr="Журнал черновиков"/>
+		
+		<view id="40000" c="Constant_Controller" t="ConstantList" f="get_list" section="Константы" descr="Все константы"/>				
+	</views>
+	
+	<serverTemplates>
+		<serverTemplate id="About"/>
+		<serverTemplate id="ConstantList" class="list"/>
+		<serverTemplate id="MainMenuConstructorList" class="list"/>		
+		<serverTemplate id="ViewList" class="list"/>	
+		<serverTemplate id="UserList" class="list"/>
+		<serverTemplate id="LoginList" class="list"/>
+		<serverTemplate id="UserMacAddressList" class="list"/>
+		<serverTemplate id="LoginDeviceList" class="list"/>
+		<serverTemplate id="ClientList" class="list"/>
+		<serverTemplate id="ClientAccessList" class="list"/>
+		<serverTemplate id="ObjectModLog" class="list"/>
+		<serverTemplate id="StudyDocumentRegisterList" class="list"/>
+		<serverTemplate id="StudyDocumentList" class="list"/>
+		<serverTemplate id="StudyDocumentAttachmentList" class="list"/>
+		<serverTemplate id="MailMessageList" class="list"/>
+		<serverTemplate id="MailTemplateList" class="list"/>
+		<serverTemplate id="StudyDocumentInsertHeadList" class="list"/>
+		<serverTemplate id="StudyDocumentInsertList" class="list"/>
+		<serverTemplate id="StudyTypeList" class="list"/>
+		<serverTemplate id="ProfessionList" class="list"/>
+		<serverTemplate id="QualificationList" class="list"/>
+		<serverTemplate id="StudyFormList" class="list"/>
+	</serverTemplates>
+	
+	<jsTemplates>
+		<jsTemplate id="ErrorControl" file="tmpl/ErrorControl.html"/>
+		<jsTemplate id="FatalException" file="tmpl/FatalException.html"/>
+		<jsTemplate id="DbException" file="tmpl/DbException.html"/>
+		<jsTemplate id="VersException" file="tmpl/VersException.html"/>
+		<jsTemplate id="IcomoonList" file="tmpl/IcomoonList.html"/>
+		<jsTemplate id="GridCmdContainerAjx" file="controls/tmpl/GridCmdContainerAjx.html"/>
+		<jsTemplate id="ViewGridColManager" file="controls/tmpl/ViewGridColManager.html"/>
+		<jsTemplate id="PopOver" file="controls/tmpl/PopOver.html"/>
+		<jsTemplate id="GridCmdFilterView" file="controls/tmpl/GridCmdFilterView.html"/>
+		<jsTemplate id="EditPeriodDate" file="controls/tmpl/EditPeriodDate.html"/>
+		<jsTemplate id="WindowPrint" file="controls/tmpl/WindowPrint.html"/>
+		<jsTemplate id="VariantStorageSaveView" file="controls/tmpl/VariantStorageSaveView.html"/>
+		<jsTemplate id="VariantStorageOpenView" file="controls/tmpl/VariantStorageOpenView.html"/>
+		<jsTemplate id="EditFile" file="tmpl/EditFile.html"/>
+		<jsTemplate id="EditFileInf" file="tmpl/EditFileInf.html"/>
+		<jsTemplate id="ExcelUploadPreviewGrid" file="tmpl/ExcelUploadPreviewGrid.html"/>
+		<jsTemplate id="UserPhoto" file="tmpl/UserPhoto.html"/>
+		<jsTemplate id="DocumentUpload_View" file="tmpl/DocumentUpload_View.html"/>
+		<jsTemplate id="StudyDocumentPersonDialog_View" file="tmpl/StudyDocumentPersonDialog_View.html"/>				
+		<jsTemplate id="Captcha" file="tmpl/Captcha.html"/>
+	</jsTemplates>
+	
+	<packages>
+	</packages>
+	
+	<sqlScripts>
+		<sqlScript file="sess_enc_read.sql"/>
+		<sqlScript file="sess_enc_write.sql"/>
+		<sqlScript file="sess_gc.sql"/>
+		<sqlScript file="variant_storages_upsert_col_order_data.sql"/>
+		<sqlScript file="variant_storages_upsert_col_visib_data.sql"/>
+		<sqlScript file="variant_storages_upsert_filter_data.sql"/>
+		<sqlScript file="users_view.sql"/>
+		<sqlScript file="init_db.sql"/>
+	</sqlScripts>
+	
+	<jsScripts>
+		<jsScript file="assets/js/core/libraries/jquery.min.js" compressed="TRUE" standalone="TRUE"/>
+		<jsScript file="assets/js/core/libraries/bootstrap.min.js" compressed="TRUE" standalone="TRUE"/>
+		<jsScript file="assets/js/plugins/loaders/blockui.min.js" compressed="TRUE" standalone="TRUE"/>
+		<jsScript file="assets/js/plugins/forms/wizards/stepy.min.js" compressed="TRUE" standalone="TRUE"/>
+		<jsScript file="assets/js/core/app.js" compressed="TRUE" standalone="TRUE"/>
+		<jsScript file="ext/bootstrap-datepicker/bootstrap-datepicker.min.js" compressed="TRUE" standalone="TRUE" version="1.0"/>
+		<jsScript file="ext/bootstrap-datepicker/bootstrap-datepicker.ru.min.js" compressed="TRUE" standalone="TRUE" version="1.0"/>
+		<jsScript file="jquery.maskedinput.js" compressed="FALSE" standalone="FALSE" version="1.0"/>	
+		<jsScript file="ext/cleave/cleave.min.js" compressed="TRUE" standalone="TRUE" version="1.6"/>
+		<jsScript file="ext/cleave/cleave-phone.ru.js" compressed="TRUE" standalone="TRUE" version="1.6"/>
+		<jsScript file="ext/jshash-2.2/md5-min.js" compressed="TRUE" standalone="TRUE"/>
+		<jsScript file="ext/mustache/mustache.min.js" compressed="TRUE" standalone="TRUE"/>
+		<jsScript file="ext/jshash-2.2/md5-min.js" compressed="TRUE" standalone="TRUE"/>
+		<!--Drag && Drop-->
+		<jsScript file="ext/DragnDrop/DragMaster.js"/>
+		<jsScript file="ext/DragnDrop/DragObject.js"/>
+		<jsScript file="ext/DragnDrop/DropTarget.js"/>		
+
+		<!-- core -->
+		<jsScript file="core/extend.js"/>		
+		<jsScript file="core/App.js"/>
+		<jsScript file="core/AppWin.js"/>				
+		<jsScript file="core/CommonHelper.js"/>
+		<jsScript file="core/DOMHelper.js"/>
+		<jsScript file="core/DateHelper.js"/>
+		<jsScript file="core/EventHelper.js"/>		
+		<jsScript file="core/FatalException.js"/>
+		<jsScript file="core/DbException.js"/>
+		<jsScript file="core/VersException.js"/>		
+		<jsScript file="core/ConstantManager.js"/>
+		
+		<jsScript file="core/AppSrv.js"/>
+		<jsScript file="core/AppSrv.rs_ru.js" resource="ru"/>
+		<jsScript file="core/CookieManager.js"/>
+		<jsScript file="core/ServConnector.js"/>
+		<jsScript file="core/Response.js"/>
+		<jsScript file="core/ResponseXML.js"/>
+		<jsScript file="core/ResponseJSON.js"/>
+		
+		<jsScript file="core/PublicMethod.js"/>
+		<jsScript file="core/PublicMethodServer.js"/>
+		<jsScript file="core/Controller.js"/>
+		<jsScript file="core/ControllerObj.js"/>				
+		<jsScript file="core/ControllerObjServer.js"/>
+		<jsScript file="core/ControllerObjClient.js"/>
+				
+		<jsScript file="core/Model.js"/>
+		<jsScript file="core/ModelXML.js"/>
+		<jsScript file="core/ModelObjectXML.js"/>
+		<jsScript file="core/ModelServRespXML.js"/>
+		
+		<jsScript file="core/ModelJSON.js"/>
+		<jsScript file="core/ModelObjectJSON.js"/>		
+		<jsScript file="core/ModelServRespJSON.js"/>
+		<jsScript file="core/ModelXMLTree.js"/>
+		
+		<jsScript file="core/Validator.js"/>
+		<jsScript file="core/ValidatorString.js"/>
+		<jsScript file="core/ValidatorBool.js"/>
+		<jsScript file="core/ValidatorDate.js"/>
+		<jsScript file="core/ValidatorDateTime.js"/>
+		<jsScript file="core/ValidatorTime.js"/>
+		<jsScript file="core/ValidatorInt.js"/>
+		<jsScript file="core/ValidatorFloat.js"/>
+		<jsScript file="core/ValidatorEnum.js"/>
+		<jsScript file="core/ValidatorJSON.js"/>
+		<jsScript file="core/ValidatorArray.js"/>
+		<jsScript file="core/ValidatorEmail.js"/>								
+		
+		<jsScript file="core/Field.js"/>
+		<jsScript file="core/FieldString.js"/>
+		<jsScript file="core/FieldEnum.js"/>
+		<jsScript file="core/FieldBool.js"/>
+		<jsScript file="core/FieldDate.js"/>
+		<jsScript file="core/FieldDateTime.js"/>
+		<jsScript file="core/FieldDateTimeTZ.js"/>
+		<jsScript file="core/FieldTime.js"/>
+		<jsScript file="core/FieldInt.js"/>
+		<jsScript file="core/FieldBigInt.js"/>
+		<jsScript file="core/FieldSmallInt.js"/>
+		<jsScript file="core/FieldFloat.js"/>
+		<jsScript file="core/FieldPassword.js"/>
+		<jsScript file="core/FieldText.js"/>
+		<jsScript file="core/FieldInterval.js"/>
+		<jsScript file="core/FieldJSON.js"/>
+		<jsScript file="core/FieldJSONB.js"/>
+		<jsScript file="core/FieldArray.js"/>
+		<jsScript file="core/FieldBytea.js"/>
+		<jsScript file="core/ModelFilter.js"/>
+		<jsScript file="core/RefType.js"/>		
+		
+		<jsScript file="core/rs_ru.js" resource="ru"/>
+		
+		<!-- **** controls *** -->		
+		<jsScript file="controls/DataBinding.js"/>
+		<jsScript file="controls/Command.js"/>
+		<jsScript file="controls/CommandBinding.js"/>
+		
+		<jsScript file="controls/Control.js"/>
+		<jsScript file="controls/rs/Control.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ControlContainer.js"/>
+		<jsScript file="controls/rs/ControlContainer.rs_ru.js" resource="ru"/>
+		
+		<jsScript file="controls/View.js"/>
+		<jsScript file="controls/ViewAjx.js"/>
+		<jsScript file="controls/rs/ViewAjx.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ViewAjxList.js"/>
+		<!--<jsScript file="controls/ErrorControl.js"/>-->
+		<jsScript file="controls/Calculator.js"/>
+		<jsScript file="controls/rs/Calculator.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/Button.js"/>
+		<jsScript file="controls/ButtonCtrl.js"/>
+		<jsScript file="controls/ButtonEditCtrl.js"/>
+		<jsScript file="controls/rs/ButtonEditCtrl.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/ButtonCalc.js"/>
+		<jsScript file="controls/rs/ButtonCalc.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ButtonCalendar.js"/>
+		<jsScript file="controls/rs/ButtonCalendar.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ButtonClear.js"/>
+		<jsScript file="controls/rs/ButtonClear.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ButtonCmd.js"/>
+		<jsScript file="controls/ButtonExpToExcel.js"/>
+		<jsScript file="controls/rs/ButtonExpToExcel.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ButtonExpToPDF.js"/>
+		<jsScript file="controls/rs/ButtonExpToPDF.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/ButtonOpen.js"/>
+		<jsScript file="controls/rs/ButtonOpen.rs_ru.js" resource="ru"/>				
+		<jsScript file="controls/ButtonInsert.js"/>
+		<jsScript file="controls/rs/ButtonInsert.rs_ru.js" resource="ru"/>				
+		<jsScript file="controls/ButtonPrint.js"/>
+		<jsScript file="controls/rs/ButtonPrint.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/ButtonPrintList.js"/>		
+		<jsScript file="controls/rs/ButtonPrintList.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ButtonSelectRef.js"/>
+		<jsScript file="controls/rs/ButtonSelectRef.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ButtonSelectDataType.js"/>
+		<jsScript file="controls/rs/ButtonSelectDataType.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ButtonMakeSelection.js"/>
+		<jsScript file="controls/rs/ButtonMakeSelection.rs_ru.js" resource="ru"/>
+		
+		<jsScript file="controls/ButtonToggle.js"/>		
+		
+		<jsScript file="controls/Label.js"/>
+		
+		<jsScript file="controls/Edit.js"/>
+		<jsScript file="controls/rs/Edit.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/EditRef.js"/>
+		<jsScript file="controls/EditComplete.js"/>		
+		<jsScript file="controls/EditString.js"/>
+		<jsScript file="controls/EditText.js"/>
+		<jsScript file="controls/EditNum.js"/>
+		<jsScript file="controls/EditInt.js"/>
+		<jsScript file="controls/EditFloat.js"/>
+		<jsScript file="controls/EditMoney.js"/>
+		<jsScript file="controls/EditPhone.js"/>
+		<jsScript file="controls/EditEmail.js"/>
+		<jsScript file="controls/EditPercent.js"/>
+		<jsScript file="controls/EditSNILS.js"/>
+		<jsScript file="controls/EditDate.js"/>
+		<jsScript file="controls/EditDateTime.js"/>
+		<jsScript file="controls/EditTime.js"/>		
+		<jsScript file="controls/EditPassword.js"/>
+		<jsScript file="controls/EditCheckBox.js"/>
+		<jsScript file="controls/EditContainer.js"/>		
+		<jsScript file="controls/rs/EditContainer.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/EditRadioGroup.js"/>
+		<jsScript file="controls/EditRadio.js"/>		
+		<jsScript file="controls/EditSelect.js"/>		
+		<jsScript file="controls/EditSelectRef.js"/>
+		<jsScript file="controls/rs/EditSelectRef.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/EditSelectOption.js"/>
+		<jsScript file="controls/EditSelectOptionRef.js"/>
+		<jsScript file="controls/EditRadioGroupRef.js"/>
+		<jsScript file="controls/rs/EditRadioGroupRef.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/PrintObj.js"/>				
+		
+		<jsScript file="controls/ControlForm.js"/>
+		<jsScript file="controls/HiddenKey.js"/>
+		<jsScript file="controls/EditJSON.js"/>
+		<jsScript file="controls/EditModalDialog.js"/>
+		<jsScript file="controls/rs/EditModalDialog.rs_ru.js" resource="ru"/>				
+		
+		<jsScript file="controls/GridColumn.js"/>
+		<jsScript file="controls/GridColumnBool.js"/>
+		<jsScript file="controls/GridColumnPhone.js"/>
+		<jsScript file="controls/GridColumnFloat.js"/>
+		<jsScript file="controls/GridColumnByte.js"/>
+		<jsScript file="custom_controls/GridColumnDate.js"/>
+		<jsScript file="controls/GridColumnDateTime.js"/>
+		<jsScript file="controls/GridColumnEnum.js"/>		
+		<jsScript file="controls/GridColumnRef.js"/>
+		<jsScript file="controls/GridColumnPicture.js"/>
+		<jsScript file="controls/GridColumnSNILS.js"/>										
+		<jsScript file="controls/GridCell.js"/>
+		<jsScript file="controls/GridCellHead.js"/>
+		<jsScript file="controls/GridCellFoot.js"/>
+		<jsScript file="controls/GridCellPhone.js"/>
+		<jsScript file="controls/rs/GridCellPhone.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCellDetailToggle.js"/>
+		<jsScript file="controls/rs/GridCellDetailToggle.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridHead.js"/>
+		<jsScript file="controls/GridRow.js"/>
+		<jsScript file="controls/GridFoot.js"/>
+		<jsScript file="controls/GridBody.js"/>
+		<jsScript file="controls/Grid.js"/>
+		<jsScript file="controls/rs/Grid.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/GridSearchInf.js"/>
+		<jsScript file="controls/rs/GridSearchInf.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/VariantStorage.js"/>
+		<jsScript file="controls/GridCommands.js"/>
+		<jsScript file="controls/GridCmd.js"/>
+		<jsScript file="controls/GridCmdContainer.js"/>
+		<jsScript file="controls/rs/GridCmdContainer.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdContainerAjx.js"/>
+		<jsScript file="controls/GridCmdContainerDOC.js"/>
+		<jsScript file="controls/GridCmdInsert.js"/>
+		<jsScript file="controls/rs/GridCmdInsert.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdEdit.js"/>
+		<jsScript file="controls/rs/GridCmdEdit.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdCopy.js"/>
+		<jsScript file="controls/rs/GridCmdCopy.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdDelete.js"/>
+		<jsScript file="controls/rs/GridCmdDelete.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdColManager.js"/>
+		<jsScript file="controls/rs/GridCmdColManager.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdPrint.js"/>
+		<jsScript file="controls/rs/GridCmdPrint.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdRefresh.js"/>
+		<jsScript file="controls/rs/GridCmdRefresh.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdPrintObj.js"/>
+		<jsScript file="controls/GridCmdSearch.js"/>
+		<jsScript file="controls/rs/GridCmdSearch.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdExport.js"/>
+		<jsScript file="controls/rs/GridCmdExport.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdAllCommands.js"/>
+		<jsScript file="controls/rs/GridCmdAllCommands.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/GridCmdDOCUnprocess.js"/>
+		<jsScript file="controls/rs/GridCmdDOCUnprocess.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdDOCShowActs.js"/>
+		<jsScript file="controls/rs/GridCmdDOCShowActs.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdRowUp.js"/>
+		<jsScript file="controls/rs/GridCmdRowUp.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdRowDown.js"/>
+		<jsScript file="controls/rs/GridCmdRowDown.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdFilter.js"/>
+		<jsScript file="controls/rs/GridCmdFilter.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdFilterView.js"/>
+		<jsScript file="controls/rs/GridCmdFilterView.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdFilterSave.js"/>
+		<jsScript file="controls/rs/GridCmdFilterSave.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdFilterOpen.js"/>
+		<jsScript file="controls/rs/GridCmdFilterOpen.rs_ru.js" resource="ru"/>
+
+		<jsScript file="controls/ViewGridColManager.js"/>
+		<jsScript file="controls/rs/ViewGridColManager.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/ViewGridColParam.js"/>
+		<jsScript file="controls/rs/ViewGridColParam.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ViewGridColVisibility.js"/>
+		<jsScript file="controls/rs/ViewGridColVisibility.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/ViewGridColOrder.js"/>
+		<jsScript file="controls/rs/ViewGridColOrder.rs_ru.js" resource="ru"/>		
+		
+		<jsScript file="controls/VariantStorageSaveView.js"/>
+		<jsScript file="controls/rs/VariantStorageSaveView.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/VariantStorageOpenView.js"/>
+		<jsScript file="controls/rs/VariantStorageOpenView.rs_ru.js" resource="ru"/>
+		
+		<jsScript file="controls/GridAjx.js"/>
+		<jsScript file="controls/rs/GridAjx.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/TreeAjx.js"/>
+		<jsScript file="controls/GridAjxDOCT.js"/>
+		<jsScript file="controls/GridAjxMaster.js"/>
+		
+		<jsScript file="controls/GridCommandsAjx.js"/>
+		<jsScript file="controls/rs/GridCommandsAjx.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCommandsDOC.js"/>
+		<jsScript file="controls/rs/GridCommandsDOC.rs_ru.js" resource="ru"/>
+		
+		<jsScript file="controls/GridPagination.js"/>
+		<jsScript file="controls/rs/GridPagination.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridFilter.js"/>
+		<jsScript file="controls/rs/GridFilter.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/EditPeriodDate.js"/>
+		<jsScript file="controls/rs/EditPeriodDate.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/EditPeriodDateTime.js"/>		
+		
+		<jsScript file="controls/ConstantGrid.js"/>
+		<jsScript file="controls/rs/ConstantGrid.rs_ru.js" resource="ru"/>
+		
+		<jsScript file="controls/ButtonOK.js"/>
+		<jsScript file="controls/rs/ButtonOK.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ButtonSave.js"/>
+		<jsScript file="controls/rs/ButtonSave.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/ButtonCancel.js"/>
+		<jsScript file="custom_controls/ButtonCancel.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ViewObjectAjx.js"/>
+		<jsScript file="controls/rs/ViewObjectAjx.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/ViewGridEditInlineAjx.js"/>
+		<jsScript file="controls/rs/ViewGridEditInlineAjx.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ViewDOC.js"/>
+		<jsScript file="controls/rs/ViewDOC.rs_ru.js" resource="ru"/>		
+
+		<jsScript file="controls/WindowPrint.js"/>
+		<jsScript file="controls/rs/WindowPrint.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/WindowQuestion.js"/>
+		<jsScript file="controls/rs/WindowQuestion.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/WindowSearch.js"/>
+		<jsScript file="controls/rs/WindowSearch.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/WindowForm.js"/>
+		<jsScript file="controls/rs/WindowForm.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/WindowFormObject.js"/>
+		<jsScript file="controls/rs/WindowFormObject.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/WindowFormModalBS.js"/>
+		<jsScript file="controls/rs/WindowFormModalBS.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/WindowMessage.js"/>
+		<jsScript file="controls/WindowTempMessage.js"/>
+		
+		<jsScript file="controls/GridCellHeadDOCProcessed.js"/>
+		<jsScript file="controls/GridCellHeadDOCDate.js"/>
+		<jsScript file="controls/GridCellHeadDOCNumber.js"/>								
+		
+		<jsScript file="controls/actb.js"/>
+		<jsScript file="controls/rs/actb.rs_ru.js" resource="ru"/>
+				
+		<jsScript file="controls/RepCommands.js"/>	
+		<jsScript file="controls/rs/RepCommands.rs_ru.js" resource="ru"/>			
+		
+		<jsScript file="controls/ViewReport.js"/>	
+		<jsScript file="controls/rs/ViewReport.rs_ru.js" resource="ru"/>
+		
+		<jsScript file="controls/PopUpMenu.js"/>								
+		<jsScript file="controls/PopOver.js"/>
+		<jsScript file="controls/PeriodSelect.js"/>
+		<jsScript file="controls/rs/PeriodSelect.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/WindowAbout.js"/>
+		<jsScript file="controls/rs/WindowAbout.rs_ru.js" resource="ru"/>
+		
+		<jsScript file="controls/MainMenuTree.js"/>		
+		<jsScript file="controls/rs/MainMenuTree.rs_ru.js" resource="ru"/>
+		
+		<jsScript file="controls/BigFileUploader.js"/>		
+		<jsScript file="controls/rs/BigFileUploader.rs_ru.js" resource="ru"/>
+
+		<!--
+		<jsScript file="controls/BreadCrum.js"/>		
+		<jsScript file="controls/rs/BreadCrum.rs_ru.js" resource="ru"/>
+		-->
+				
+		<jsScript file="controls/ButtonOrgSearch.js"/>		
+		<jsScript file="controls/rs/ButtonOrgSearch.rs_ru.js" resource="ru"/>
+		
+		<jsScript file="controls/Captcha.js"/>		
+		<jsScript file="controls/rs/Captcha.rs_ru.js" resource="ru"/>		
+
+		<jsScript file="controls/GridCellHeadMark.js"/>		
+		<jsScript file="controls/rs/GridCellHeadMark.rs_ru.js" resource="ru"/>		
+
+		<!-- **** Forms *** -->
+		<jsScript file="forms/ViewList_Form.js"/>
+		<jsScript file="forms/MainMenuConstructor_Form.js"/>
+		<jsScript file="forms/User_Form.js"/>
+		<jsScript file="forms/UserList_Form.js"/>
+		
+		<jsScript file="forms/ClientList_Form.js"/>
+		<jsScript file="forms/Client_Form.js"/>
+		<jsScript file="forms/StudyDocumentRegister_Form.js"/>
+		<jsScript file="forms/StudyDocumentRegisterList_Form.js"/>
+		<jsScript file="forms/StudyDocument_Form.js"/>
+		<jsScript file="forms/StudyDocumentList_Form.js"/>
+		<jsScript file="forms/MailTemplate_Form.js"/>
+		<jsScript file="forms/StudyDocumentInsertHead_Form.js"/>
+		<jsScript file="forms/StudyDocumentInsertList_Form.js"/>				
+		<jsScript file="forms/StudyDocumentInsert_Form.js"/>
+		
+		<jsScript file="forms/StudyTypeList_Form.js"/>
+		<jsScript file="forms/ProfessionList_Form.js"/>
+		<jsScript file="forms/QualificationList_Form.js"/>
+		<jsScript file="forms/StudyFormList_Form.js"/>
+
+		<!-- **** Controllers && Models *** -->
+		<jsScript file="controllers/User_Controller.js"/>
+		
+		<!-- **** Views *** -->
+		<jsScript file="views/Login_View.js"/>		
+		<jsScript file="views/MainMenuConstructorList_View.js"/>
+		<jsScript file="views/MainMenuConstructor_View.js"/>		
+		<jsScript file="views/ViewList_View.js"/>						
+		<jsScript file="views/About_View.js"/>		
+		<jsScript file="views/ConstantList_View.js"/>
+		<jsScript file="views/ProjectManager_View.js"/>
+		<jsScript file="views/LoginList_View.js"/>
+				
+		<jsScript file="views/UserList_View.js"/>
+		<jsScript file="views/UserDialog_View.js"/>
+		<jsScript file="views/UserProfile_View.js"/>				
+		<jsScript file="views/TimeZoneLocale_View.js"/>
+		<jsScript file="views/LoginDeviceList_View.js"/>																
+		<jsScript file="views/LoginDeviceBanList_View.js"/>
+		<jsScript file="views/UserMacAddressList_View.js"/>
+		<jsScript file="views/ClientList_View.js"/>
+		<jsScript file="views/ClientDialog_View.js"/>
+		<jsScript file="views/ClientAccessList_View.js"/>
+		<jsScript file="views/ObjectModLog_View.js"/>
+		<jsScript file="views/StudyDocumentRegisterList_View.js"/>
+		<jsScript file="views/StudyDocumentRegisterDialog_View.js"/>								
+		<jsScript file="views/StudyDocumentList_View.js"/>
+		<jsScript file="views/StudyDocumentDialog_View.js"/>
+		<jsScript file="views/StudyDocumentInsertDialog_View.js"/>
+		<jsScript file="views/StudyDocumentPersonDialog_View.js"/>																
+		<jsScript file="views/StudyDocumentAttachmentList_View.js"/>
+		<jsScript file="views/PersonData_View.js"/>
+		<jsScript file="views/MailMessageList_View.js"/>
+		<jsScript file="views/MailTemplateList_View.js"/>				
+		<jsScript file="views/MailTemplate_View.js"/>
+		<jsScript file="views/PasswordRecovery_View.js"/>				
+		<jsScript file="views/Registration_View.js"/>
+		<jsScript file="views/StudyDocumentInsertHeadDialog_View.js"/>
+		<jsScript file="views/StudyDocumentInsertList_View.js"/>
+		<jsScript file="views/StudyDocumentInsertHeadList_View.js"/>
+		<jsScript file="views/StudyDocumentInsertAttachmentList_View.js"/>
+		<jsScript file="views/StudyDocumentEditList_View.js"/>		
+		
+		<jsScript file="views/StudyTypeList_View.js"/>
+		<jsScript file="views/ProfessionList_View.js"/>
+		<jsScript file="views/QualificationList_View.js"/>
+		<jsScript file="views/StudyFormList_View.js"/>
+		
+		<jsScript file="tmpl/App.templates.js" compressed="FALSE" standalone="FALSE"/>
+		
+		<jsScript file="custom_controls/App_dpassport.js"/>
+		
+		<jsScript file="custom_controls/ViewSectionSelect.js"/>
+		<jsScript file="custom_controls/ViewEditRef.js"/>
+		<!-->
+		<jsScript file="custom_controls/DOCCommands.js"/>
+		<jsScript file="custom_controls/DOCNumberEdit.js"/>
+		<jsScript file="custom_controls/DOCDateEdit.js"/>
+		-->
+		<jsScript file="custom_controls/UserNameEdit.js"/>		
+		<jsScript file="custom_controls/UserEditRef.js"/>
+		<jsScript file="custom_controls/TimeZoneLocaleEdit.js"/>		
+		
+		<jsScript file="custom_controls/rs_common_ru.js"/>		
+		<jsScript file="custom_controls/rs_ru.js" resource="ru"/>
+		<jsScript file="custom_controls/ErrorControl.js"/>		
+		<jsScript file="custom_controls/Pagination.js"/>
+		<jsScript file="custom_controls/ClientEdit.js"/>
+		<jsScript file="custom_controls/ClientEditStr.js"/>
+		<jsScript file="custom_controls/StudyDocumentRegisterEdit.js"/>
+		<jsScript file="custom_controls/EditFile.js"/>
+		<jsScript file="custom_controls/rs/EditFile.rs_ru.js" resource="ru"/>		
+		<jsScript file="custom_controls/AttachmentManager.js"/>
+		<jsScript file="custom_controls/Constant_study_document_fields_Edit.js"/>
+		<jsScript file="custom_controls/Constant_study_document_fields_View.js"/>
+		<jsScript file="custom_controls/Constant_study_document_fields_Grid.js"/>
+		<jsScript file="custom_controls/Constant_study_document_register_fields_Edit.js"/>
+		<jsScript file="custom_controls/Constant_study_document_register_fields_View.js"/>
+		<jsScript file="custom_controls/Constant_study_document_register_fields_Grid.js"/>
+		<jsScript file="custom_controls/Constant_mail_server_Edit.js"/>
+		<jsScript file="custom_controls/Constant_mail_server_View.js"/>
+		<jsScript file="custom_controls/Constant_api_server_Edit.js"/>
+		<jsScript file="custom_controls/Constant_api_server_View.js"/>
+		<jsScript file="custom_controls/Constant_client_offer_Edit.js"/>
+		<jsScript file="custom_controls/Constant_client_offer_View.js"/>
+		
+		
+		<jsScript file="custom_controls/DocumentUpload_View.js"/>
+		<jsScript file="custom_controls/StudyDocumentUploadGridCmd.js"/>
+		<jsScript file="custom_controls/StudyDocumentUploadBtn.js"/>
+		<jsScript file="custom_controls/UserPhotoEdit.js"/>
+		<jsScript file="custom_controls/PersonDataBox.js"/>								
+		<jsScript file="custom_controls/ReportTemplateFieldGrid.js"/>
+		<jsScript file="custom_controls/ReportTemplateEditRef.js"/>
+		<jsScript file="custom_controls/ClientSelect.js"/>
+		<jsScript file="custom_controls/StudyDocumentInsertAttachmentListGridCmd.js"/>
+		<jsScript file="custom_controls/StudyDocumentInsertAttachmentBtn.js"/>
+		<jsScript file="custom_controls/StudyDocumentInsertEdit.js"/>		
+		<jsScript file="custom_controls/EditINN.js"/>
+		<jsScript file="custom_controls/EditEmailInlineValidation.js"/>
+		<jsScript file="custom_controls/EditDateInlineValidation.js"/>
+		<jsScript file="custom_controls/StudyTypeEdit.js"/>
+		<jsScript file="custom_controls/ProfessionEdit.js"/>																
+		<jsScript file="custom_controls/QualificationEdit.js"/>
+		<jsScript file="custom_controls/StudyFormEdit.js"/>
+		<jsScript file="custom_controls/NameEdit.js"/>
+		<jsScript file="custom_controls/Constant_server_1c_Edit.js"/>
+		<jsScript file="custom_controls/Constant_server_1c_View.js"/>
+		<jsScript file="custom_controls/Constant_qr_code_Edit.js"/>
+		<jsScript file="custom_controls/Constant_qr_code_View.js"/>
+		
+		
+		
+		<jsScript file="enum_controls/Enum_data_types.js"/>
+		<jsScript file="enum_controls/EnumGridColumn_data_types.js"/>
+		<jsScript file="enum_controls/EnumGridColumn_locales.js"/>
+		<jsScript file="enum_controls/EnumGridColumn_role_types.js"/>
+		<jsScript file="enum_controls/Enum_locales.js"/>
+		<jsScript file="enum_controls/Enum_role_types.js"/>
+		
+		<jsScript file="models/TimeZoneLocale_Model.js"/>
+		<jsScript file="models/User_Model.js"/>
+		<jsScript file="models/UserList_Model.js"/>
+		<jsScript file="models/UserDialog_Model.js"/>
+		<jsScript file="models/Session_Model.js"/>
+		<jsScript file="models/Login_Model.js"/>
+		<jsScript file="models/LoginList_Model.js"/>
+		<jsScript file="models/ConstantList_Model.js"/>
+		<jsScript file="models/View_Model.js"/>
+		<jsScript file="models/ViewList_Model.js"/>
+		<jsScript file="models/ViewSectionList_Model.js"/>
+		<jsScript file="models/MainMenuConstructor_Model.js"/>
+		<jsScript file="models/MainMenuConstructorList_Model.js"/>
+		<jsScript file="models/MainMenuConstructorDialog_Model.js"/>
+		<jsScript file="models/MainMenuContent_Model.js"/>
+		<jsScript file="models/VariantStorage_Model.js"/>
+		<jsScript file="models/VariantStorageList_Model.js"/>
+		<jsScript file="models/About_Model.js"/>
+		
+		<jsScript file="views/rs_ru.js"/>
+		<jsScript file="views/rs_common_ru.js" resource="ru"/>
+		<jsScript file="models/UserLogin_Model.js"/>
+		<jsScript file="models/UserProfile_Model.js"/>
+		<jsScript file="controllers/TimeZoneLocale_Controller.js"/>
+		<jsScript file="controllers/Constant_Controller.js"/>
+		<jsScript file="controllers/Enum_Controller.js"/>
+		<jsScript file="controllers/MainMenuConstructor_Controller.js"/>
+		<jsScript file="controllers/MainMenuContent_Controller.js"/>
+		<jsScript file="controllers/SrvStatistics_Controller.js"/>
+		<jsScript file="controllers/VariantStorage_Controller.js"/>
+		<jsScript file="controllers/View_Controller.js"/>
+		<jsScript file="controllers/About_Controller.js"/>
+	<jsScript file="models/UserMacAddress_Model.js"/><jsScript file="models/UserMacAddressList_Model.js"/><jsScript file="models/LoginDeviceList_Model.js"/><jsScript file="models/LoginDeviceBan_Model.js"/><jsScript file="custom_controls/App.enums.js"/><jsScript file="controllers/UserMacAddress_Controller.js"/><jsScript file="controllers/Login_Controller.js"/><jsScript file="controllers/LoginDevice_Controller.js"/><jsScript file="controllers/LoginDeviceBan_Controller.js"/><jsScript file="controllers/Client_Controller.js"/><jsScript file="models/Client_Model.js"/><jsScript file="models/ClientList_Model.js"/><jsScript file="models/ClientDialog_Model.js"/><jsScript file="models/ClientAccess_Model.js"/><jsScript file="models/ClientAccessList_Model.js"/><jsScript file="controllers/ClientAccess_Controller.js"/><jsScript file="enum_controls/Enum_object_mod_actions.js"/><jsScript file="enum_controls/EnumGridColumn_object_mod_actions.js"/><jsScript file="models/ObjectModLog_Model.js"/><jsScript file="controllers/ObjectModLog_Controller.js"/><jsScript file="enum_controls/Enum_doc_create_types.js"/><jsScript file="enum_controls/EnumGridColumn_doc_create_types.js"/><jsScript file="models/StudyDocumentRegister_Model.js"/><jsScript file="models/StudyDocumentRegisterList_Model.js"/><jsScript file="models/StudyDocumentRegisterDialog_Model.js"/><jsScript file="controllers/StudyDocumentRegister_Controller.js"/><jsScript file="models/StudyDocument_Model.js"/><jsScript file="models/StudyDocumentList_Model.js"/><jsScript file="models/StudyDocumentDialog_Model.js"/><jsScript file="controllers/StudyDocument_Controller.js"/><jsScript file="models/StudyDocumentAttachment_Model.js"/><jsScript file="models/StudyDocumentAttachmentList_Model.js"/><jsScript file="controllers/StudyDocumentAttachment_Controller.js"/><jsScript file="controllers/ClientSearch_Controller.js"/><jsScript file="models/DadataCache_Model.js"/><jsScript file="controllers/Constant_study_document_fields_Controller.js"/><jsScript file="models/Constant_study_document_fields_Model.js"/><jsScript file="models/StudyDocumentUploadUserOrder_Model.js"/><jsScript file="models/StudyDocumentRegisterUploadUserOrder_Model.js"/><jsScript file="controllers/UserOperation_Controller.js"/><jsScript file="models/UserOperation_Model.js"/><jsScript file="controllers/Constant_study_document_register_fields_Controller.js"/><jsScript file="models/Constant_study_document_register_fields_Model.js"/><jsScript file="enum_controls/Enum_sexes.js"/><jsScript file="enum_controls/EnumGridColumn_sexes.js"/><jsScript file="controllers/PersonData_Controller.js"/><jsScript file="models/StudyDocumentWithPictList_Model.js"/><jsScript file="models/MailMessage_Model.js"/><jsScript file="models/MailMessageAttachment_Model.js"/><jsScript file="controllers/MailMessage_Controller.js"/><jsScript file="controllers/MailMessageAttachment_Controller.js"/><jsScript file="enum_controls/Enum_mail_types.js"/><jsScript file="enum_controls/EnumGridColumn_mail_types.js"/><jsScript file="models/MailTemplate_Model.js"/><jsScript file="controllers/MailTemplate_Controller.js"/><jsScript file="models/MailTemplateList_Model.js"/><jsScript file="controllers/ReportTemplateField_Controller.js"/><jsScript file="models/ReportTemplateField_Model.js"/><jsScript file="controllers/Captcha_Controller.js"/><jsScript file="models/UserOperationDialog_Model.js"/><jsScript file="controllers/Company_Controller.js"/><jsScript file="models/Company_Model.js"/><jsScript file="models/StudyDocumentInsert_Model.js"/><jsScript file="models/StudyDocumentInsertList_Model.js"/><jsScript file="controllers/StudyDocumentInsert_Controller.js"/><jsScript file="models/StudyDocumentInsertHead_Model.js"/><jsScript file="controllers/StudyDocumentInsertHead_Controller.js"/><jsScript file="models/StudyDocumentInsertHeadList_Model.js"/><jsScript file="models/StudyDocumentInsertAttachmentList_Model.js"/><jsScript file="controllers/StudyDocumentInsertAttachment_Controller.js"/><jsScript file="models/StudyDocumentInsertSelectList_Model.js"/><jsScript file="models/UserSelect_Model.js"/><jsScript file="models/StudyType_Model.js"/><jsScript file="models/Profession_Model.js"/><jsScript file="controllers/StudyType_Controller.js"/><jsScript file="controllers/Profession_Controller.js"/><jsScript file="controllers/Qualification_Controller.js"/><jsScript file="models/Qualification_Model.js"/><jsScript file="models/StudyForm_Model.js"/><jsScript file="controllers/StudyForm_Controller.js"/><jsScript file="models/MailMessageList_Model.js"/></jsScripts>	
+	<cssScripts>
+		<cssScript file="assets/css/icons/icomoon/styles.css" compressed="TRUE" standalone="TRUE"/>
+		<cssScript file="assets/css/bootstrap.min.css" compressed="TRUE" standalone="TRUE"/>
+		<cssScript file="assets/css/core.min.css" compressed="TRUE" standalone="TRUE"/>
+		<cssScript file="assets/css/components.min.css" compressed="TRUE" standalone="TRUE"/>
+		<cssScript file="assets/css/colors.min.css" compressed="TRUE" standalone="TRUE"/>
+		<cssScript file="assets/css/icons/fontawesome/styles.min.css" compressed="TRUE" standalone="TRUE"/>
+		<cssScript file="ext/bootstrap-datepicker/bootstrap-datepicker.standalone.min.css" compressed="TRUE" standalone="TRUE"/>
+		<cssScript file="custom-css/style.css" standalone="TRUE"/>
+		<cssScript file="custom-css/print.css" standalone="TRUE"/>
+	</cssScripts>	
+</metadata>

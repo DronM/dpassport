@@ -1,0 +1,134 @@
+<div id="{{id}}" class="panel panel-white hidden">
+	<div id="{{id}}:cmd-cont">
+		<div id="{{id}}:cmdOk"/>
+		<div id="{{id}}:cmdCancel"/>
+	</div>
+
+	<div class="panel-heading">
+		<h6 class="panel-title">Добавление сертификатов
+		</h6>
+	</div>
+	
+	<div class="tabbable">
+		<ul class="nav nav-tabs nav-tabs-highlight">
+			<li class="active">
+				<a href="#company" data-toggle="tab" aria-expanded="true" title="Данные по компании">Компания</a>
+			</li>
+			<li>
+				<a href="#protocol" data-toggle="tab" aria-expanded="false" title="Данные по протоколу">Протокол</a>
+			</li>
+			
+			<li>
+				<a href="#certificates" data-toggle="tab" aria-expanded="false" title="Список сертификатов">Сертификаты</a>
+			</li>
+			<li>
+				<a href="#attachments" data-toggle="tab" aria-expanded="false" title="Сканы сертификатов">Сканы сертификатов</a>
+			</li>
+			
+		</ul>
+	</div>
+	
+	<!-- Tab panes -->
+	<div class="tab-content dialogForm">	
+		<div class="tab-pane fade in active" id="company">
+			<div class="panel panel-body userDialogTab">
+				<div class="panel-heading">
+					<h4 class="panel-title">Компания</h4>
+				</div>
+				
+				<div id="{{id}}:companies_ref"/>
+			</div>
+		</div>
+
+		<div class="tab-pane fade" id="protocol">
+			<div class="panel panel-body userDialogTab">
+				<div class="panel-heading">
+					<h4 class="panel-title">Протокол</h4>
+				</div>
+				<div id="{{id}}:protocol_help_t" class="alert alert-info alert-styled-left alert-bordered hidden">
+					<h6>Заполните данные по протоколу и прикрепите скан.
+					</h6>												
+				</div>											
+				
+				<div id="{{id}}:register_date"/>
+				<div id="{{id}}:register_name"/>		
+				<div id="{{id}}:common_study_form"/>
+				
+				<fieldset>
+					<legend class="panel-title">Скан документа</legend>
+					<div id="{{id}}:register_attachment"/>
+				</fieldset>	
+			</div>
+		</div>
+		
+		<div class="tab-pane fade" id="certificates">
+			<div class="panel panel-body userDialogTab">
+				<div class="panel-heading">
+					<h4 class="panel-title">Сертификаты</h4>
+				</div>
+				<div id="{{id}}:cert_help_t" class="alert alert-info alert-styled-left alert-bordered hidden">
+					<h6>Заполните данные по сертификатам
+					</h6>												
+				</div>
+														
+				<div class="panel panel-even">
+					<div class="panel-heading">
+						<h6 class="panel-title">
+							<span class="text-semibold app-client-header">Общие данные для всех сертификатов
+							</span>
+						</h6>
+						<div class="heading-elements">
+							<ul class="icons-list">
+								<li>
+									<a id="{{id}}:cmdCommonFieldsToggle" data-action="collapse"></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					
+					<div class="panel-body" style="display: block;">
+						<div id="{{id}}:common_issue_date"/>
+						<div id="{{id}}:common_end_date"/>
+						<div id="{{id}}:common_post"/>
+						<div id="{{id}}:common_work_place"/>
+						<div id="{{id}}:common_organization"/>
+						<div id="{{id}}:common_study_type"/>
+						<div id="{{id}}:common_series"/>
+						<div id="{{id}}:common_study_prog_name"/>
+						<div id="{{id}}:common_profession"/>
+						<div id="{{id}}:common_study_period"/>
+						<div id="{{id}}:common_qualification_name"/>						
+					</div>
+				</div>
+				<div id="{{id}}:document_list"/>
+			</div>
+		</div>
+		
+		<div class="tab-pane fade" id="attachments">
+			<div class="panel panel-body userDialogTab">
+				<div class="panel-heading">
+					<h4 class="panel-title">Сканы</h4>
+				</div>
+				<div id="{{id}}:scan_help_t" class="alert alert-info alert-styled-left alert-bordered hidden">
+					<h6>Прикрепите сканы документов к сертификатам.
+					</h6>												
+					<div>Возможно загрузить сразу несколько файлов со сканами документов. Если имена файлов будут совпадать с ФИО или со СНИЛС владельцев, то владельцы будут определены автоматически.
+					</div>																	
+					<div>Возможно также добавить сканы документов для каждого физического лица вручную.
+					</div>												
+					
+				</div>											
+				
+				<div id="{{id}}:attachment_list"/>	
+				
+			</div>			
+			
+			<div id="{{id}}:cmd-cont">
+				<div id="{{id}}:submit"/>
+			</div>				
+			
+		</div>
+		
+	</div>
+</div>
+

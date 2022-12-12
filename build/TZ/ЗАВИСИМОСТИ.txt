@@ -1,0 +1,27 @@
+1) xalan
+трансформация XSLT шаблонов
+
+2) soffice
+LibreOffice
+Трансформация doc, docx, xls, xlsx, odt, ods
+Заложено, не используется, теоретически можно подключить, если разрешить загрузку файлов с данными расширениями
+
+3) pdftoppm
+scale pdf
+sudo apt install poppler-utils
+
+3) convert
+Консольная утилита от ImageMagick обработка графических файлов
+convert
+sudo apt install imagemagick
+
+4) ssconvert
+Трансформация xlsx в csv
+sudo apt-get install --no-install-recommends gnumeric
+
+
+5) uuidgen
+Генерация uuid, входит в поставку Ubuntu
+
+
+Все ставится из пакетов для ubuntu

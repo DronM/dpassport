@@ -1,0 +1,67 @@
+<div id="{{id}}">
+	<div id="{{id}}:cmd-cont">
+		<div id="{{id}}:cmdOk"/>
+		<div id="{{id}}:cmdCancel"/>
+	</div>
+
+	<div class="row">
+		<h1 class="page-header">Протокол</h1>
+	</div>
+	
+	<div class="tabbable">
+		<ul class="nav nav-tabs nav-tabs-highlight">
+			<li class="active">
+				<a href="#docum" data-toggle="tab" aria-expanded="true">Документ</a>
+			</li>
+			<li>
+				<a href="#cert_list" data-toggle="tab" aria-expanded="false">Сертификаты</a>
+			</li>
+			
+			<li>
+				<a href="#history" data-toggle="tab" aria-expanded="false">История изменений</a>
+			</li>
+		</ul>
+	</div>
+		
+	<!-- Tab panes -->
+	<div class="tab-content dialogForm">	
+		<div class="tab-pane fade in active" id="docum">
+			<div class="panel panel-body userDialogTab">
+				<div class="panel-heading">
+					<h4 class="panel-title">Документ</h4>
+				</div>
+				
+				<div id="{{id}}:issue_date"/>
+				<div id="{{id}}:name"/>				
+				<div id="{{id}}:companies_ref"/>
+				<div id="{{id}}:study_form"/>
+				<div id="{{id}}:create_type"/>
+				
+				<fieldset>
+					<legend class="panel-title">Скан документа</legend>
+					<div id="{{id}}:attachments"/>
+				</fieldset>	
+			</div>
+		</div>
+
+		<div class="tab-pane fade" id="cert_list">
+			<div class="panel panel-body userDialogTab">
+				<div class="panel-heading">
+					<h4 class="panel-title">Сертификаты по протоколу</h4>
+				</div>
+				<div id="{{id}}:cert_list"/>	
+			</div>
+		</div>
+
+		<div class="tab-pane fade" id="history">
+			<div class="panel panel-body userDialogTab">
+				<div class="panel-heading">
+					<h4 class="panel-title">История изменений документа</h4>
+				</div>
+				<div id="{{id}}:object_mod_log"/>	
+			</div>
+		</div>
+	</div>	
+	
+	
+</div>	

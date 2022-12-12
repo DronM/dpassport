@@ -1,0 +1,109 @@
+<div id="{{id}}">
+	<div id="{{id}}:cmd-cont">
+		<div id="{{id}}:cmdOk"/>
+		<div id="{{id}}:cmdCancel"/>
+	</div>
+
+	<div class="row">
+		<h1 class="page-header">Сертификат</h1>
+	</div>
+	
+	<div class="tabbable">
+		<ul class="nav nav-tabs nav-tabs-highlight">
+			<li class="active">
+				<a href="#person" data-toggle="tab" aria-expanded="true">Физическое лицо</a>
+			</li>
+		
+			<li>
+				<a href="#docum" data-toggle="tab" aria-expanded="false">Документ</a>
+			</li>
+			<li>
+				<a href="#register" data-toggle="tab" aria-expanded="false">Протокол</a>
+			</li>
+			<li>
+				<a href="#client" data-toggle="tab" aria-expanded="false">Компания</a>
+			</li>
+			
+			<li>
+				<a href="#history" data-toggle="tab" aria-expanded="false">История изменений</a>
+			</li>
+		</ul>
+	</div>
+		
+	<!-- Tab panes -->
+	<div class="tab-content dialogForm">	
+		<div class="tab-pane fade in active" id="person">
+			<div class="panel panel-body userDialogTab">
+				<div class="panel-heading">
+					<h4 class="panel-title">Физическое лицо</h4>
+				</div>
+				<div id="{{id}}:name_second"/>
+				<div id="{{id}}:name_first"/>
+				<div id="{{id}}:name_middle"/>
+				<div id="{{id}}:snils"/>
+{{#USER_EDIT}}
+				<div id="{{id}}:users_ref"/>				
+{{/USER_EDIT}}				
+			</div>
+		</div>
+	
+		<div class="tab-pane fade " id="docum">
+			<div class="panel panel-body userDialogTab">
+				<div class="panel-heading">
+					<h4 class="panel-title">Документ</h4>
+				</div>
+				
+				<div id="{{id}}:issue_date"/>
+				<div id="{{id}}:end_date"/>
+				
+				<div id="{{id}}:series"/>
+				<div id="{{id}}:number"/>
+				<div id="{{id}}:study_prog_name"/>
+				<div id="{{id}}:study_period"/>
+				<div id="{{id}}:post"/>
+				<div id="{{id}}:work_place"/>				
+				<div id="{{id}}:organization"/>
+				<div id="{{id}}:study_type"/>
+				<div id="{{id}}:profession"/>
+				<div id="{{id}}:reg_number"/>
+				<div id="{{id}}:qualification_name"/>
+				<div id="{{id}}:study_form"/>
+				
+				<div id="{{id}}:create_type"/>
+				
+				<fieldset>
+					<legend class="panel-title">Скан документа</legend>
+					<div id="{{id}}:attachments"/>
+				</fieldset>	
+			</div>
+		</div>
+		
+		<div class="tab-pane fade" id="register">
+			<div class="panel panel-body userDialogTab">
+				<div class="panel-heading">
+					<h4 class="panel-title">Протокол</h4>
+				</div>
+				<div id="{{id}}:study_document_registers_ref"/>	
+			</div>
+		</div>
+		<div class="tab-pane fade" id="client">
+			<div class="panel panel-body userDialogTab">
+				<div class="panel-heading">
+					<h4 class="panel-title">Компания</h4>
+				</div>
+				<div id="{{id}}:clients_ref"/>
+				<div id="{{id}}:companies_ref"/>
+			</div>
+		</div>
+
+		<div class="tab-pane fade" id="history">
+			<div class="panel panel-body userDialogTab">
+				<div class="panel-heading">
+					<h4 class="panel-title">История изменений документа</h4>
+				</div>
+				<div id="{{id}}:object_mod_log"/>	
+			</div>
+		</div>
+	</div>	
+	
+</div>	

@@ -1,0 +1,43 @@
+<div id="{{id}}" class="panel panel-flat">
+	<div class="alert alert-info alert-styled-left">
+		<h6>Порядок загрузки сертификатов из файла Excel:
+		</h6>
+		<p>
+			<a id="{{id}}:excel_template" href="#" title="Нажмите для сохраниения шаблона">Сохраните
+			</a>шаблон файла Excel
+		</p>
+		<p>Укажите количество строк файла для просмотра:
+			<span id="{{id}}:analyze_count" >
+			</span>
+		</p>
+		<p>
+			<a id="{{id}}:analize_file" href="#" title="Нажмите для выбра файла">Выберите
+			</a>файл Excel для просмотра
+		</p>
+	</div>
+
+	<div id="{{id}}:preview_grid_cont">
+	</div>
+	
+	<div id="{{id}}:uploadCmd" class="alert alert-info alert-styled-left hidden" style="margin-top: 10px;">
+		<h6>Выберите организацию и загрузите файл
+		</h6>	
+		<div id="{{id}}:companies_ref">
+		</div>
+		<div id="{{id}}:upload_file">
+		</div>		
+	</div>
+	
+	<div id="{{id}}:upload_ok_cont" class="alert alert-info alert-styled-left hidden">
+	</div>
+	<div id="{{id}}:upload_er_cont" class="alert alert-danger alert-styled-left hidden">
+		<h6>Во время загрузки произошли ошибки
+		</h6>
+		<p id="{{id}}:upload_er_text">
+		</p>
+		<p>
+			<a id="{{id}}:excel_error" href="#" title="Нажмите для скачивания файла">Скачайте
+			</a>файл Excel с ошибками, сделайте исправления и повторите загрузку
+		</p>
+	</div>
+</div>

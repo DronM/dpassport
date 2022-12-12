@@ -1,0 +1,33 @@
+-- VIEW: public.study_document_inserts_list
+
+--DROP VIEW public.study_document_inserts_list;
+
+CREATE OR REPLACE VIEW public.study_document_inserts_list AS
+	SELECT
+		t.id
+		,t.session_id
+		,t.view_id
+		,t.snils
+		,t.date_time
+		,t.issue_date
+		,t.end_date
+		,t.post
+		,t.work_place
+		,t.organization
+		,t.study_type
+		,t.series
+		,t.number
+		,t.study_prog_name
+		,t.profession
+		,t.reg_number
+		,t.study_period
+		,t.name_first
+		,t.name_second
+		,t.name_middle
+		,t.qualification_name
+	FROM public.study_document_inserts AS t
+	
+	
+	;
+	
+ALTER VIEW public.study_document_inserts_list OWNER TO ;

@@ -1,0 +1,112 @@
+<div id="{{id}}" class="panel panel-flat">
+	<div id="{{id}}:cmd-cont">
+		<div id="{{id}}:cmdOk"/>
+		<div id="{{id}}:cmdCancel"/>
+	</div>
+
+	<div class="panel-heading">
+		<h3 class="panel-title">{{HEAD_TITLE}}<a class="heading-elements-toggle"><i class="icon-more"></i></a></h3>
+	</div>
+	
+	<div class="panel-body dialogForm">
+	
+		<div id="{{id}}:client_type"/>
+		<div id="{{id}}:name"/>
+		
+		<div class="tabbable">
+			<!--  {{app.COLOR_CLASS}} -->
+			<ul class="nav nav-tabs nav-tabs-highlight">
+				<li class="active"><a href="#main" data-toggle="tab" aria-expanded="true">Основные данные</a></li>
+				<li class=""><a href="#address" data-toggle="tab" aria-expanded="false">Адреса</a></li>
+{{#IS_ADMIN}}
+				<li class=""><a href="#parent" data-toggle="tab" aria-expanded="false">Площадка</a></li>
+				<li class=""><a href="#client_access" data-toggle="tab" aria-expanded="false">Доступ</a></li>
+				<li class=""><a href="#client_users" data-toggle="tab" aria-expanded="false">Пользователи</a></li>
+				<li class=""><a href="#client_companies" data-toggle="tab" aria-expanded="false">Компании</a></li>
+{{/IS_ADMIN}}				
+				<li>
+					<a href="#history" data-toggle="tab" aria-expanded="false">История изменений</a>
+				</li>
+				<!--<li class=""><a href="#bank_accounts" data-toggle="tab" aria-expanded="false">Расчетные счета</a></li>-->
+			</ul>
+			
+			<div class="tab-content">
+				<div class="tab-pane fade in active" id="main">					
+					<div class="panel panel-body">
+						<div class="panel-heading">
+							<h4 class="panel-title">Основные данные организации</h4>
+						</div>
+						<div id="{{id}}:name_full"/>
+						<div id="{{id}}:inn"/>
+						<div id="{{id}}:kpp"/>
+						<div id="{{id}}:okpo"/>
+						<div id="{{id}}:ogrn"/>
+						<div id="{{id}}:okved"/>
+						<div id="{{id}}:email"/>
+						<div id="{{id}}:tel"/>
+					</div>	
+				</div>
+
+				<div class="tab-pane fade clientTab" id="address">
+					<div class="panel panel-body">
+						<div class="panel-heading">
+							<h4 class="panel-title">Список адресов организации</h4>
+						</div>
+						<div id="{{id}}:legal_address"/>
+						<div id="{{id}}:post_address"/>
+					</div>	
+				</div>
+{{#IS_ADMIN}}
+				<div class="tab-pane fade clientTab" id="parent">
+					<div class="panel panel-body">
+						<div class="panel-heading">
+							<h4 class="panel-title">Принадлежность к основной организации</h4>
+						</div>
+				
+						<div id="{{id}}:parents_ref"/>
+					</div>	
+				</div>
+
+				<div class="tab-pane fade clientTab" id="client_access">
+					<div class="panel panel-body">
+						<div class="panel-heading">
+							<h4 class="panel-title">Разрешение доступа в программу</h4>
+						</div>
+						<div id="{{id}}:client_access_list"/>
+					</div>	
+				</div>
+
+				<div class="tab-pane fade clientTab" id="client_users">
+					<div class="panel panel-body">
+						<div class="panel-heading">
+							<h4 class="panel-title">Список пользователей данной организации</h4>
+						</div>
+					
+						<div id="{{id}}:user_list"/>
+					</div>	
+				</div>
+				
+				<div class="tab-pane fade clientTab" id="client_companies">
+					<div class="panel panel-body">
+						<div class="panel-heading">
+							<h4 class="panel-title">Список копманий данной организации</h4>
+						</div>
+						<div id="{{id}}:company_list"/>
+					</div>	
+				</div>
+{{/IS_ADMIN}}
+				
+				<div class="tab-pane fade" id="history">
+					<div class="panel panel-body">
+						<div class="panel-heading">
+							<h4 class="panel-title">История изменений организации</h4>
+						</div>
+						<div id="{{id}}:object_mod_log"/>	
+					</div>
+				</div>
+			</div>
+			
+		</div>	
+	</div>
+	
+</div>	

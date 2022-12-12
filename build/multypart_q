@@ -1,0 +1,15 @@
+curl --location --request POST 'http://192.168.1.3:59000' \
+--form 'c="StudyDocumentAttachment"' \
+--form 'f="add_file"' \
+--form 'v="ViewXML"' \
+--form 'content_info={"id":"123456","name":"777.pdf","size":125000}' \
+--form 'study_documents_ref={"keys": {"id":1}}' \
+--form 'content_data=@"/home/andrey/777.pdf"'
+
+curl --location --request POST 'http://192.168.1.3:59000' \
+--form 'c="StudyDocumentAttachment"' \
+--form 'f="add_file"' \
+--form 'v="ViewXML"' \
+--form 'content_info={"id":"123456","name":"777.pdf","size":125000}' \
+--form 'content_data=@"/home/andrey/777.pdf"'
+

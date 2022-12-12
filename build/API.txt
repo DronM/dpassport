@@ -1,0 +1,53 @@
+curl -d '{"token":"nentoken", "method":"index"}' -H "Content-Type: application/json" -X POST https://gazpro-admin.centr-ugra.ru/api_learning
+
+
+
+curl -d '{"token":"nentoken", "method":"show", "uuid":"8b0e13f1-524a-46d4-bb39-a0d75bf9b1f5"}' -H "Content-Type: application/json" -X POST https://gazpro-admin.centr-ugra.ru/api_learning
+
+
+curl -d '{"token":"nentoken", "method":"show_attach", "uuid":"4e96e718-159c-4530-bf0a-ded07c1ab44b"}' -H "Content-Type: application/json" -X POST https://gazpro-admin.centr-ugra.ru/api_learning
+
+
+
+curl -d '{"token": "nentoken", "method": "show", "uuid": "01f4f8fb-78ae-4220-b7ab-10b1873e9280"}' -H "Content-Type: application/json" -X POST -i https://gazpro-admin.centr-ugra.ru/api_learning
+
+
+
+
+curl -d '{"token": "nentoken", "method": "index"}' -H "Content-Type: application/json" -X POST -i https://gazpro-admin.centr-ugra.ru/api_learning
+
+
+
+Протокол
+curl -d '{"token": "nentoken", "method": "show", "uuid": "53e5f16a-5bf3-4bc0-bf0c-85e2f03f9bc2"}' -H "Content-Type: application/json" -X POST -i https://gazpro-admin.centr-ugra.ru/api_learning
+curl -d '{"token": "nentoken", "method": "show_attach", "uuid": "53e5f16a-5bf3-4bc0-bf0c-85e2f03f9bc2"}' -H "Content-Type: application/json" -X POST -i https://gazpro-admin.centr-ugra.ru/api_learning
+{"error":{"path":"show"}}
+
+
+Юзер
+curl -d '{"token": "nentoken", "method": "show", "uuid": "4e96e718-159c-4530-bf0a-ded07c1ab44b"}' -H "Content-Type: application/json" -X POST -i https://gazpro-admin.centr-ugra.ru/api_learning
+curl https://gazpro-admin.centr-ugra.ru/api_learning.pdf?token=nentoken&method=show_attach&uuid=bb3fa947-9ce3-4e69-8d00-54a7afde8a80
+
+//Certificate
+curl -d '{"token": "nentoken", "method": "show", "uuid": "2912eed2-1943-4dcb-8e14-c3da48e1fe38"}' -H "Content-Type: application/json" -X POST -i https://gazpro-admin.centr-ugra.ru/api_learning
+curl -d '{"token": "nentoken", "method": "show_attach", "uuid": "0db7ae0c-175c-40dd-9032-5e8a3e565fbe"}' -H "Content-Type: application/json" -X POST -i https://gazpro-admin.centr-ugra.ru/api_learning
+
+
+
+curl -d '{"token": "nentoken", "method": "show", "uuid": "1b81ebe8-33cf-4f68-8a8f-a63806a37057"}' -H "Content-Type: application/json" -X POST -i https://gazpro-admin.centr-ugra.ru/api_learning
+27ee24bb-3ba5-4775-9a7b-efda98be36cd
+
+curl -d '{"token": "nentoken", "method": "delete", "uuid": ["4e96e718-159c-4530-bf0a-ded07c1ab44b"]}' -H "Content-Type: application/json" -X POST -i https://gazpro-admin.centr-ugra.ru/api_learning
+
+
+
+
+******************
+
+http://192.168.1.3:59000/lk?ef159690ceef1a60bff667a1632e1905
+
+curl -d '{"token": "nentoken", "method": "show", "uuid": "e84f74ea-e343-43b7-8ff1-26d8392005a6"}' -H "Content-Type: application/json" -X POST -i https://gazpro-admin.centr-ugra.ru/api_learning
+https://gazpro-admin.centr-ugra.ru/api_learning.pdf?token=nentoken&method=show_attach&uuid=e84f74ea-e343-43b7-8ff1-26d8392005a6
+
+curl -d '{"token": "nentoken", "method": "index", "qrcode": "ef159690ceef1a60bff667a1632e1905"}' -H "Content-Type: application/json" -X POST -i https://gazpro-admin.centr-ugra.ru/api_learning
+

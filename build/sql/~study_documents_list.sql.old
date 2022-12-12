@@ -1,0 +1,57 @@
+-- VIEW: public.study_documents_list
+
+--DROP VIEW public.study_documents_list;
+
+CREATE OR REPLACE VIEW public.study_documents_list AS
+	SELECT
+		t.id
+		,t.study_document_type_id
+		,study_document_types_ref(study_document_types_ref_t) AS study_document_types_ref
+		,t.date_time
+		,t.client_id
+		,clients_ref(clients_ref_t) AS clients_ref
+		,t.study_document_regiter_id
+		,study_document_regiters_ref(study_document_regiters_ref_t) AS study_document_regiters_ref
+		,t.create_type
+		,t.person_data
+		,t.series
+		,t.number
+		,t.study_prog_name
+		,t.study_hours
+		,t.digital_sig
+	FROM public.study_documents AS t
+	
+	
+	
+	
+	
+	LEFT JOIN study_document_types AS study_document_types_ref_t ON study_document_types_ref_t.id = t.study_document_type_id
+	
+	
+	
+	
+	
+	LEFT JOIN clients AS clients_ref_t ON clients_ref_t.id = t.client_id
+	
+	
+	
+	LEFT JOIN study_document_regiters AS study_document_regiters_ref_t ON study_document_regiters_ref_t.id = t.study_document_regiter_id
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	ORDER BY date_time DESC
+	;
+	
+ALTER VIEW public.study_documents_list OWNER TO ;
